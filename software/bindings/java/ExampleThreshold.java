@@ -9,10 +9,13 @@ public class ExampleThreshold {
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions you
 	//       might normally want to catch are described in the commnents below
 	public static void main(String args[]) throws Exception {
-		IPConnection ipcon = new IPConnection(host, port); // Create connection to brickd (Can throw IOException)
+		// Create connection to brickd
+		IPConnection ipcon = new IPConnection(host, port); // Can throw IOException
 
 		BrickletTemperature temp = new BrickletTemperature(UID); // Create device object
-		ipcon.addDevice(temp); // Add device to ip connection (Can throw IPConnection.TimeoutException)
+
+		// Add device to ip connection
+		ipcon.addDevice(temp); // Can throw IPConnection.TimeoutException
 		// Don't use device before it is added to a connection
 		
 
@@ -22,7 +25,8 @@ public class ExampleThreshold {
 		// Configure threshold for "greater than 30 °C" (unit is °C/100)
 		temp.setTemperatureCallbackThreshold('>', (short)(30*100), (short)0);
 
-		// Add and implement temperature reached listener (called if temperature is greater than 30 °C)
+		// Add and implement temperature reached listener 
+		// (called if temperature is greater than 30 °C)
 		temp.addListener(new BrickletTemperature.TemperatureReachedListener() {
 			public void temperatureReached(short temperature) {
 				System.out.println("We have " + temperature/100.0 + " °C.");
