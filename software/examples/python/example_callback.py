@@ -5,8 +5,8 @@ HOST = "localhost"
 PORT = 4223
 UID = "XYZ" # Change to your UID
 
-from ip_connection import IPConnection
-from bricklet_temperature import Temperature
+from tinkerforge.ip_connection import IPConnection
+from tinkerforge.bricklet_temperature import Temperature
 
 # Callback function for temperature callback (parameter has unit °C/100)
 def cb_temperature(temperature):
