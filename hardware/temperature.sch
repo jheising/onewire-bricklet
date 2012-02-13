@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Do 25 Aug 2011 13:39:44 CEST
+EESchema Schematic File Version 2  date Fr 30 Dez 2011 10:20:31 CET
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,8 +36,8 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Temperature Bricklet"
-Date "25 aug 2011"
-Rev "1.0"
+Date "30 dec 2011"
+Rev "1.1"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
 Comment2 "Copyright (©) 2011, B.Nordmeyer <bastian@tinkerforge.com>"
@@ -59,11 +59,6 @@ Wire Wire Line
 	5050 5200 5300 5200
 Wire Wire Line
 	6100 5000 6300 5000
-Connection ~ 5100 3650
-Wire Wire Line
-	5100 3650 4950 3650
-Wire Wire Line
-	4950 3650 4950 3750
 Connection ~ 6100 3950
 Wire Wire Line
 	6150 3950 6100 3950
@@ -98,8 +93,6 @@ Wire Wire Line
 Wire Wire Line
 	6100 3950 6100 4050
 Wire Wire Line
-	4950 4450 4950 4250
-Wire Wire Line
 	5100 3000 5100 4800
 Wire Wire Line
 	5100 4800 6250 4800
@@ -126,28 +119,28 @@ ALERT
 Text GLabel 5300 3100 2    60   Input ~ 0
 ALERT
 $Comp
-L GND #PWR6
+L GND #PWR5
 U 1 1 4CE2C195
 P 5200 5400
-F 0 "#PWR6" H 5200 5400 30  0001 C CNN
+F 0 "#PWR5" H 5200 5400 30  0001 C CNN
 F 1 "GND" H 5200 5330 30  0001 C CNN
 	1    5200 5400
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR10
+L GND #PWR9
 U 1 1 4CE2C190
 P 7050 5400
-F 0 "#PWR10" H 7050 5400 30  0001 C CNN
+F 0 "#PWR9" H 7050 5400 30  0001 C CNN
 F 1 "GND" H 7050 5330 30  0001 C CNN
 	1    7050 5400
 	1    0    0    -1  
 $EndComp
 $Comp
-L VCC #PWR8
+L VCC #PWR7
 U 1 1 4CE2C18A
 P 6200 4700
-F 0 "#PWR8" H 6200 4800 30  0001 C CNN
+F 0 "#PWR7" H 6200 4800 30  0001 C CNN
 F 1 "VCC" H 6200 4800 30  0000 C CNN
 	1    6200 4700
 	1    0    0    -1  
@@ -178,29 +171,10 @@ F 2 "SOT563" H 5700 5100 60  0001 C CNN
 $EndComp
 NoConn ~ 4950 3200
 $Comp
-L GND #PWR3
-U 1 1 4CE29764
-P 4950 4450
-F 0 "#PWR3" H 4950 4450 30  0001 C CNN
-F 1 "GND" H 4950 4380 30  0001 C CNN
-	1    4950 4450
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R1
-U 1 1 4CE2975D
-P 4950 4000
-F 0 "R1" V 5030 4000 50  0000 C CNN
-F 1 "DNP" V 4950 4000 50  0000 C CNN
-F 2 "0603" H 4950 4000 60  0001 C CNN
-	1    4950 4000
-	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR9
+L GND #PWR8
 U 1 1 4CE29748
 P 6550 4100
-F 0 "#PWR9" H 6550 4100 30  0001 C CNN
+F 0 "#PWR8" H 6550 4100 30  0001 C CNN
 F 1 "GND" H 6550 4030 30  0001 C CNN
 	1    6550 4100
 	1    0    0    -1  
@@ -267,19 +241,19 @@ SDA
 Text GLabel 5300 2800 2    60   Output ~ 0
 SCL
 $Comp
-L VCC #PWR7
+L VCC #PWR6
 U 1 1 4C5FD35E
 P 6100 3950
-F 0 "#PWR7" H 6100 4050 30  0001 C CNN
+F 0 "#PWR6" H 6100 4050 30  0001 C CNN
 F 1 "VCC" H 6100 4050 30  0000 C CNN
 	1    6100 3950
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR5
+L GND #PWR4
 U 1 1 4C5FD34E
 P 5200 4450
-F 0 "#PWR5" H 5200 4450 30  0001 C CNN
+F 0 "#PWR4" H 5200 4450 30  0001 C CNN
 F 1 "GND" H 5200 4380 30  0001 C CNN
 	1    5200 4450
 	1    0    0    -1  
@@ -304,10 +278,10 @@ F 1 "VCC" H 5050 2500 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR4
+L GND #PWR3
 U 1 1 4C5FCF5E
 P 5200 2750
-F 0 "#PWR4" H 5200 2750 30  0001 C CNN
+F 0 "#PWR3" H 5200 2750 30  0001 C CNN
 F 1 "GND" H 5200 2680 30  0001 C CNN
 	1    5200 2750
 	1    0    0    -1  
