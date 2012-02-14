@@ -66,8 +66,8 @@ void destructor(void) {
 	simple_destructor();
 }
 
-void tick(void) {
-	simple_tick();
+void tick(uint8_t tick_type) {
+	simple_tick(tick_type);
 }
 
 int32_t get_temperature(int32_t value) {
