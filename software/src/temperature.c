@@ -72,7 +72,7 @@ void tick(uint8_t tick_type) {
 
 int32_t get_temperature(int32_t value) {
     if((BC->tick % 250) == 0) {
-    	if(BA->mutex_take(*BA->mutex_twi_bricklet, 0)) {
+    	if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
     		value = temperature_read();
     		BA->mutex_give(*BA->mutex_twi_bricklet);
     	}
