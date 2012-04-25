@@ -11,13 +11,11 @@ public class ExampleThreshold {
 	public static void main(String args[]) throws Exception {
 		// Create connection to brickd
 		IPConnection ipcon = new IPConnection(host, port); // Can throw IOException
-
 		BrickletTemperature temp = new BrickletTemperature(UID); // Create device object
 
-		// Add device to ip connection
+		// Add device to IP connection
 		ipcon.addDevice(temp); // Can throw IPConnection.TimeoutException
 		// Don't use device before it is added to a connection
-		
 
 		// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 		temp.setDebouncePeriod(10000);
@@ -33,7 +31,7 @@ public class ExampleThreshold {
 				System.out.println("It is too hot, we need air conditioning!");
 			}
 		});
-		
+
 		System.out.println("Press ctrl+c to exit");
 		ipcon.joinThread();
 	}

@@ -10,9 +10,8 @@ class Example
 	{
 		IPConnection ipcon = new IPConnection(HOST, PORT); // Create connection to brickd
 		BrickletTemperature temp = new BrickletTemperature(UID); // Create device object
-		ipcon.AddDevice(temp); // Add device to ip connection
+		ipcon.AddDevice(temp); // Add device to IP connection
 		// Don't use device before it is added to a connection
-
 
 		// Get current temperature (unit is °C/100)
 		short temperature;
@@ -22,5 +21,5 @@ class Example
 
 		System.Console.WriteLine("Press ctrl+c to exit");
 		ipcon.JoinThread();
-    }
+	}
 }
