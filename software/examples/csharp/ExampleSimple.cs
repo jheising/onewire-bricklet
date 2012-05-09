@@ -14,8 +14,7 @@ class Example
 		// Don't use device before it is added to a connection
 
 		// Get current temperature (unit is °C/100)
-		short temperature;
-		temp.GetTemperature(out temperature);
+		short temperature = temp.GetTemperature();
 
 		System.Console.WriteLine("Temperature: " + temperature/100.0 + " °C");
 
