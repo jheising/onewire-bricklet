@@ -21,7 +21,7 @@ ipcon.add_device t # Add device to IP connection
 t.set_temperature_callback_period 1000 
 
 # Register temperature callback (parameter has unit °C/100)
-t.register_callback BrickletTemperature::CALLBACK_TEMPERATURE, do |temperature|
+t.register_callback(BrickletTemperature::CALLBACK_TEMPERATURE) do |temperature|
   puts "Temperature: #{temperature/100.0} °C"
 end
 

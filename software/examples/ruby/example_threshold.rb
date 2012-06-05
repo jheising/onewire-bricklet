@@ -19,7 +19,7 @@ ipcon.add_device t # Add device to IP connection
 t.set_debounce_period 10000
 
 # Register callback for temperature greater than 30 °C
-t.register_callback BrickletTemperature::CALLBACK_TEMPERATURE_REACHED, do |temperature|
+t.register_callback(BrickletTemperature::CALLBACK_TEMPERATURE_REACHED) do |temperature|
   puts "We have #{temperature/100.0} °C."
   puts "It is too hot, we need air conditioning!"
 end
