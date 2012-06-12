@@ -33,18 +33,18 @@ int main() {
 	}
 	// Don't use device before it is added to a connection
 
+	// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
+	temperature_set_debounce_period(&t, 10000);
 
-    // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
-    temperature_set_debounce_period(&t, 10000);
-
-    // Register threshold reached callback to function cb_reached
-    temperature_register_callback(&t,
+	// Register threshold reached callback to function cb_reached
+	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE_REACHED,
 	                              cb_reached);
-	
-    // Configure threshold for "greater than 30 °C" (unit is °C/100)
-    temperature_set_temperature_callback_threshold(&t, '>', 30*100, 0);
 
-	printf("Press ctrl+c to close\n");
-	ipcon_join_thread(&ipcon); // Join mainloop of IP connection
+	// Configure threshold for "greater than 30 °C" (unit is °C/100)
+	temperature_set_temperature_callback_threshold(&t, '>', 30*100, 0);
+
+	printf("Press key to exit\n");
+	getchar();
+	ipcon_destroy(&ipcon);
 }

@@ -42,6 +42,7 @@ int main() {
 	                              TEMPERATURE_CALLBACK_TEMPERATURE, 
 	                              cb_temperature);
 
-	printf("Press ctrl+c to close\n");
-	ipcon_join_thread(&ipcon); // Join mainloop of IP connection
+	printf("Press key to exit\n");
+	getchar();
+	ipcon_destroy(&ipcon);
 }

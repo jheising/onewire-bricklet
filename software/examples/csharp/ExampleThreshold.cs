@@ -29,7 +29,8 @@ class Example
 		// Configure threshold for "greater than 30 °C" (unit is °C/100)
 		temp.SetTemperatureCallbackThreshold('>', 30*100, 0);
 
-		System.Console.WriteLine("Press ctrl+c to exit");
-		ipcon.JoinThread();
+		System.Console.WriteLine("Press key to exit");
+		System.Console.ReadKey();
+		ipcon.Destroy();
 	}
 }
