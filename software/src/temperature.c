@@ -1,5 +1,5 @@
 /* temperature-bricklet
- * Copyright (C) 2010-2011 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2010-2012 Olaf Lüke <olaf@tinkerforge.com>
  *
  * temperature.c: Implementation of Temperature Bricklet messages
  *
@@ -22,6 +22,7 @@
 #include "temperature.h"
 
 #include "brickletlib/bricklet_entry.h"
+#include "brickletlib/bricklet_simple.h"
 #include "bricklib/bricklet/bricklet_communication.h"
 #include "config.h"
 
@@ -51,11 +52,17 @@ const SimpleMessageProperty smp[] = {
 };
 
 const SimpleUnitProperty sup[] = {
-	{get_temperature, SIMPLE_SIGNEDNESS_INT, TYPE_TEMPERATURE, TYPE_TEMPERATURE_REACHED, SIMPLE_UNIT_TEMPERATURE} // temperature
+	{get_temperature, SIMPLE_SIGNEDNESS_INT, FID_TEMPERATURE, FID_TEMPERATURE_REACHED, SIMPLE_UNIT_TEMPERATURE} // temperature
 };
 
-void invocation(uint8_t com, uint8_t *data) {
+const uint8_t smp_length = sizeof(smp);
+
+void invocation(const ComType com, const uint8_t *data) {
 	simple_invocation(com, data);
+
+	if(((MessageHeader*)data)->fid > FID_LAST) {
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+	}
 }
 
 void constructor(void) {
@@ -66,18 +73,19 @@ void destructor(void) {
 	simple_destructor();
 }
 
-void tick(uint8_t tick_type) {
+void tick(const uint8_t tick_type) {
 	simple_tick(tick_type);
 }
 
-int32_t get_temperature(int32_t value) {
+int32_t get_temperature(const int32_t value) {
+	int32_t new_value = value;
     if((BC->tick % 250) == 0) {
     	if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
-    		value = temperature_read();
+    		new_value = temperature_read();
     		BA->mutex_give(*BA->mutex_twi_bricklet);
     	}
     }
-    return value;
+    return new_value;
 }
 
 int16_t two_complement_12_to_16(const int16_t value) {

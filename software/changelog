@@ -1,3 +1,4 @@
 1.0.0: Initial version
 1.1.0: Add support for tick types
 1.1.1: Use timeout for i2c mutex, otherwise Temperature Bricklet does not work with IMU Brick
+2.0.0: Support for protocol 2.0

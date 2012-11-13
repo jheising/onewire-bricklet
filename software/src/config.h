@@ -1,5 +1,5 @@
 /* temperature-bricklet
- * Copyright (C) 2010-2011 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2010-2012 Olaf Lüke <olaf@tinkerforge.com>
  *
  * config.h: Temperature Bricklet specific configuration
  *
@@ -29,10 +29,15 @@
 
 #include "temperature.h"
 
-#define BRICKLET_HARDWARE_NAME "Temperature Bricklet 1.0"
-#define BRICKLET_FIRMWARE_VERSION_MAJOR 1
-#define BRICKLET_FIRMWARE_VERSION_MINOR 1
-#define BRICKLET_FIRMWARE_VERSION_REVISION 1
+#define BRICKLET_FIRMWARE_VERSION_MAJOR 2
+#define BRICKLET_FIRMWARE_VERSION_MINOR 0
+#define BRICKLET_FIRMWARE_VERSION_REVISION 0
+
+#define BRICKLET_HARDWARE_VERSION_MAJOR 1
+#define BRICKLET_HARDWARE_VERSION_MINOR 1
+#define BRICKLET_HARDWARE_VERSION_REVISION 0
+
+#define BRICKLET_DEVICE_IDENTIFIER 216
 
 #define LOGGING_LEVEL LOGGING_DEBUG
 #define DEBUG_BRICKLET 1

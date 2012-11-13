@@ -1,5 +1,5 @@
 /* temperature-bricklet
- * Copyright (C) 2010-2011 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2010-2012 Olaf Lüke <olaf@tinkerforge.com>
  *
  * temperature.h: Implementation of Temperature Bricklet messages
  *
@@ -24,23 +24,27 @@
 
 #include <stdint.h>
 
-#define TYPE_GET_TEMPERATURE 1
-#define TYPE_SET_TEMPERATURE_CALLBACK_PERIOD 2
-#define TYPE_GET_TEMPERATURE_CALLBACK_PERIOD 3
-#define TYPE_SET_TEMPERATURE_CALLBACK_THRESHOLD 4
-#define TYPE_GET_TEMPERATURE_CALLBACK_THRESHOLD 5
-#define TYPE_SET_DEBOUNCE_PERIOD 6
-#define TYPE_GET_DEBOUNCE_PERIOD 7
-#define TYPE_TEMPERATURE 8
-#define TYPE_TEMPERATURE_REACHED 9
+#include "bricklib/com/com_common.h"
 
-int32_t get_temperature(int32_t value);
+#define FID_GET_TEMPERATURE 1
+#define FID_SET_TEMPERATURE_CALLBACK_PERIOD 2
+#define FID_GET_TEMPERATURE_CALLBACK_PERIOD 3
+#define FID_SET_TEMPERATURE_CALLBACK_THRESHOLD 4
+#define FID_GET_TEMPERATURE_CALLBACK_THRESHOLD 5
+#define FID_SET_DEBOUNCE_PERIOD 6
+#define FID_GET_DEBOUNCE_PERIOD 7
+#define FID_TEMPERATURE 8
+#define FID_TEMPERATURE_REACHED 9
+
+#define FID_LAST 9
+
+int32_t get_temperature(const int32_t value);
 int16_t two_complement_12_to_16(const int16_t value);
 int16_t temperature_read(void);
 
-void invocation(uint8_t com, uint8_t *data);
+void invocation(const ComType com, const uint8_t *data);
 void constructor(void);
 void destructor(void);
-void tick(uint8_t tick_type);
+void tick(const uint8_t tick_type);
 
 #endif
