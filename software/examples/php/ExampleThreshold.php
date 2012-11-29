@@ -17,11 +17,11 @@ function cb_reached($temperature)
     echo "It is too hot, we need air conditioning!\n";
 }
 
-$ipcon = new IPConnection($host, $port); // Create IP connection to brickd
-$t = new BrickletTemperature($uid); // Create device object
+$ipcon = new IPConnection(); // Create IP connection
+$t = new BrickletTemperature($uid, $ipcon); // Create device object
 
-$ipcon->addDevice($t); // Add device to IP connection
-// Don't use device before it is added to a connection
+$ipcon->connect($host, $port); // Connect to brickd
+// Don't use device before ipcon is connected
 
 // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 $t->setDebouncePeriod(10000);
