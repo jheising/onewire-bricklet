@@ -9,28 +9,25 @@
 #define UID "XYZ" // Change to your UID
 
 // Callback function for temperature callback (parameter has unit °C/100)
-void cb_temperature(int16_t temperature) {
+void cb_temperature(int16_t temperature, void *user_data) {
 	printf("Temperature: %f °C.\n", temperature/100.0);
 }
 
 int main() {
-	// Create IP connection to brickd
+	// Create IP connection
 	IPConnection ipcon;
-	if(ipcon_create(&ipcon, HOST, PORT) < 0) {
-		fprintf(stderr, "Could not create connection\n");
-		exit(1);
-	}
+	ipcon_create(&ipcon);
 
 	// Create device object
 	Temperature t;
-	temperature_create(&t, UID); 
+	temperature_create(&t, UID, &ipcon); 
 
-	// Add device to IP connection
-	if(ipcon_add_device(&ipcon, &t) < 0) {
-		fprintf(stderr, "Could not connect to Bricklet\n");
+	// Connect to brickd
+	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
+		fprintf(stderr, "Could not connect\n");
 		exit(1);
 	}
-	// Don't use device before it is added to a connection
+	// Don't use device before ipcon is connected
 
 	// Set Period for temperature callback to 1s (1000ms)
 	// Note: The callback is only called every second if the 
@@ -40,7 +37,8 @@ int main() {
 	// Register temperature callback to function cb_temperature
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE, 
-	                              cb_temperature);
+	                              cb_temperature,
+								  NULL);
 
 	printf("Press key to exit\n");
 	getchar();
