@@ -12,7 +12,7 @@ type
     ipcon: TIPConnection;
     t: TBrickletTemperature;
   public
-    procedure ReachedCB(const temperature: smallint);
+    procedure ReachedCB(sender: TObject; const temperature: smallint);
     procedure Execute;
   end;
 
@@ -25,7 +25,7 @@ var
   e: TExample;
 
 { Callback for temperature greater than 30 °C }
-procedure TExample.ReachedCB(const temperature: smallint);
+procedure TExample.ReachedCB(sender: TObject; const temperature: smallint);
 begin
   WriteLn(Format('We have %f °C.', [temperature/100.0]));
   WriteLn('It is too hot, we need air conditioning!');
@@ -33,15 +33,15 @@ end;
 
 procedure TExample.Execute;
 begin
-  { Create IP connection to brickd }
-  ipcon := TIPConnection.Create(HOST, PORT);
+  { Create IP connection }
+  ipcon := TIPConnection.Create();
 
   { Create device object }
-  t := TBrickletTemperature.Create(UID);
+  t := TBrickletTemperature.Create(UID, ipcon);
 
-  { Add device to IP connection }
-  ipcon.AddDevice(t);
-  { Don't use device before it is added to a connection }
+  { Connect to brickd }
+  ipcon.Connect(HOST, PORT);
+  { Don't use device before ipcon is connected }
 
   { Get threshold callbacks with a debounce time of 10 seconds (10000ms) }
   t.SetDebouncePeriod(10000);
@@ -54,7 +54,6 @@ begin
 
   WriteLn('Press key to exit');
   ReadLn;
-  ipcon.Destroy;
 end;
 
 begin
