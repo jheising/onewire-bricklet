@@ -9,11 +9,11 @@ from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_temperature import Temperature
 
 if __name__ == "__main__":
-    ipcon = IPConnection(HOST, PORT) # Create IP connection to brickd
+    ipcon = IPConnection() # Create IP connection
+    t = Temperature(UID, ipcon) # Create device object
 
-    t = Temperature(UID) # Create device object
-    ipcon.add_device(t) # Add device to IP connection
-    # Don't use device before it is added to a connection
+    ipcon.connect(HOST, PORT) # Connect to brickd
+    # Don't use device before ipcon is connected
 
     # Get current temperature (unit is °C/100)
     temperature = t.get_temperature()/100.0
@@ -21,4 +21,3 @@ if __name__ == "__main__":
     print('Temperature: ' + str(temperature) + ' °C')
 
     raw_input('Press key to exit\n') # Use input() in Python 3
-    ipcon.destroy()

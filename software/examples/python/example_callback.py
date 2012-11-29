@@ -13,11 +13,11 @@ def cb_temperature(temperature):
     print('Temperature: ' + str(temperature/100.0) + ' °C')
 
 if __name__ == "__main__":
-    ipcon = IPConnection(HOST, PORT) # Create IP connection to brickd
+    ipcon = IPConnection() # Create IP connection
+    t = Temperature(UID, ipcon) # Create device object
 
-    t = Temperature(UID) # Create device object
-    ipcon.add_device(t) # Add device to IP connection
-    # Don't use device before it is added to a connection
+    ipcon.connect(HOST, PORT) # Connect to brickd
+    # Don't use device before ipcon is connected
 
     # Set Period for temperature callback to 1s (1000ms)
     # Note: The callback is only called every second if the 
@@ -28,4 +28,3 @@ if __name__ == "__main__":
     t.register_callback(t.CALLBACK_TEMPERATURE, cb_temperature)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
-    ipcon.destroy()
