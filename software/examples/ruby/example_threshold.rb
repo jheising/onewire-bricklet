@@ -10,10 +10,11 @@ HOST = 'localhost'
 PORT = 4223
 UID = 'XYZ' # Change to your UID
 
-ipcon = IPConnection.new HOST, PORT # Create IP connection to brickd
-t = BrickletTemperature.new UID # Create device object
-ipcon.add_device t # Add device to IP connection
-# Don't use device before it is added to a connection
+ipcon = IPConnection.new # Create IP connection
+t = BrickletTemperature.new UID, ipcon # Create device object
+
+ipcon.connect HOST, PORT # Connect to brickd
+# Don't use device before ipcon is connected
 
 # Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 t.set_debounce_period 10000
@@ -29,4 +30,3 @@ t.set_temperature_callback_threshold '>', 30*100, 0
 
 puts 'Press key to exit'
 $stdin.gets
-ipcon.destroy
