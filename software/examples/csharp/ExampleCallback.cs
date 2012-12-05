@@ -7,17 +7,18 @@ class Example
 	private static string UID = "ABC"; // Change to your UID
 
 	// Callback function for temperature callback (parameter has unit °C/100)
-	static void TemperatureCB(short temperature)
+	static void TemperatureCB(object sender, short temperature)
 	{
 		System.Console.WriteLine("Temperature: " + temperature/100.0 + " °C");
 	}
 
 	static void Main() 
 	{
-		IPConnection ipcon = new IPConnection(HOST, PORT); // Create connection to brickd
-		BrickletTemperature temp = new BrickletTemperature(UID); // Create device object
-		ipcon.AddDevice(temp); // Add device to IP connection
-		// Don't use device before it is added to a connection
+		IPConnection ipcon = new IPConnection(); // Create IP connection
+		BrickletTemperature temp = new BrickletTemperature(UID, ipcon); // Create device object
+
+		ipcon.Connect(HOST, PORT); // Connect to brickd
+		// Don't use device before ipcon is connected
 
 		// Set Period for temperature callback to 1s (1000ms)
 		// Note: The temperature callback is only called every second if the 
@@ -25,10 +26,9 @@ class Example
 		temp.SetTemperatureCallbackPeriod(1000);
 
 		// Register temperature callback to function TemperatureCB
-		temp.RegisterCallback(new BrickletTemperature.Temperature(TemperatureCB));
+		temp.Temperature += TemperatureCB;
 
 		System.Console.WriteLine("Press key to exit");
 		System.Console.ReadKey();
-		ipcon.Destroy();
 	}
 }
