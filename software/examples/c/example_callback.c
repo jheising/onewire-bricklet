@@ -10,6 +10,8 @@
 
 // Callback function for temperature callback (parameter has unit °C/100)
 void cb_temperature(int16_t temperature, void *user_data) {
+	(void)user_data; // avoid unused parameter warning
+
 	printf("Temperature: %f °C.\n", temperature/100.0);
 }
 
@@ -38,7 +40,7 @@ int main() {
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE, 
 	                              cb_temperature,
-								  NULL);
+	                              NULL);
 
 	printf("Press key to exit\n");
 	getchar();

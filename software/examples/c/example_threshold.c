@@ -10,6 +10,8 @@
 
 // Callback for temperature greater than 30 °C
 void cb_reached(int16_t temperature, void *user_data) {
+	(void)user_data; // avoid unused parameter warning
+
 	printf("We have %f °C.\n", temperature/100.0);
 	printf("It is too hot, we need air conditioning!\n");
 }
@@ -37,7 +39,7 @@ int main() {
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE_REACHED,
 	                              cb_reached,
-								  NULL);
+	                              NULL);
 
 	// Configure threshold for "greater than 30 °C" (unit is °C/100)
 	temperature_set_temperature_callback_threshold(&t, '>', 30*100, 0);
