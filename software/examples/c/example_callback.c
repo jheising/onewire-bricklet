@@ -39,7 +39,7 @@ int main() {
 	// Register temperature callback to function cb_temperature
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE, 
-	                              cb_temperature,
+	                              (void *)cb_temperature,
 	                              NULL);
 
 	printf("Press key to exit\n");
