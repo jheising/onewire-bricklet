@@ -7,7 +7,7 @@ class Example
 	private static string UID = "ABC"; // Change to your UID
 
 	// Callback function for temperature callback (parameter has unit °C/100)
-	static void TemperatureCB(object sender, short temperature)
+	static void TemperatureCB(BrickletTemperature sender, short temperature)
 	{
 		System.Console.WriteLine("Temperature: " + temperature/100.0 + " °C");
 	}

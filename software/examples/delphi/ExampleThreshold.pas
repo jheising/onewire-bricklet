@@ -12,7 +12,7 @@ type
     ipcon: TIPConnection;
     t: TBrickletTemperature;
   public
-    procedure ReachedCB(sender: TObject; const temperature: smallint);
+    procedure ReachedCB(sender: TBrickletTemperature; const temperature: smallint);
     procedure Execute;
   end;
 
@@ -25,7 +25,7 @@ var
   e: TExample;
 
 { Callback for temperature greater than 30 °C }
-procedure TExample.ReachedCB(sender: TObject; const temperature: smallint);
+procedure TExample.ReachedCB(sender: TBrickletTemperature; const temperature: smallint);
 begin
   WriteLn(Format('We have %f °C.', [temperature/100.0]));
   WriteLn('It is too hot, we need air conditioning!');

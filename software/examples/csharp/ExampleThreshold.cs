@@ -7,7 +7,7 @@ class Example
 	private static string UID = "ABC"; // Change to your UID
 
 	// Callback for temperature greater than 30 °C
-	static void ReachedCB(object sender, short temperature)
+	static void ReachedCB(BrickletTemperature sender, short temperature)
 	{
 		System.Console.WriteLine("We have: " + temperature/100.0 + " °C");
 		System.Console.WriteLine("It is too hot, we need air conditioning!");

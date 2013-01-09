@@ -12,7 +12,7 @@ type
     ipcon: TIPConnection;
     t: TBrickletTemperature;
   public
-    procedure TemperatureCB(sender: TObject; const temperature: smallint);
+    procedure TemperatureCB(sender: TBrickletTemperature; const temperature: smallint);
     procedure Execute;
   end;
 
@@ -25,7 +25,7 @@ var
   e: TExample;
 
 { Callback function for temperature callback (parameter has unit °C/100) }
-procedure TExample.TemperatureCB(sender: TObject; const temperature: smallint);
+procedure TExample.TemperatureCB(sender: TBrickletTemperature; const temperature: smallint);
 begin
   WriteLn(Format('Temperature: %f °C', [temperature/100.0]));
 end;
