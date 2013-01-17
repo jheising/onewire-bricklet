@@ -23,7 +23,7 @@ public class ExampleThreshold {
 
 		// Add and implement temperature reached listener 
 		// (called if temperature is greater than 30 °C)
-		temp.addListener(new BrickletTemperature.TemperatureReachedListener() {
+		temp.addTemperatureReachedListener(new BrickletTemperature.TemperatureReachedListener() {
 			public void temperatureReached(short temperature) {
 				System.out.println("We have " + temperature/100.0 + " °C.");
 				System.out.println("It is too hot, we need air conditioning!");

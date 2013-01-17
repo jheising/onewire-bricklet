@@ -21,7 +21,7 @@ public class ExampleCallback {
 		temp.setTemperatureCallbackPeriod(1000);
 
 		// Add and implement temperature listener (called if temperature changes)
-		temp.addListener(new BrickletTemperature.TemperatureListener() {
+		temp.addTemperatureListener(new BrickletTemperature.TemperatureListener() {
 			public void temperature(short temperature) {
 				System.out.println("Temperature: " + temperature/100.0 + " °C");
 			}
