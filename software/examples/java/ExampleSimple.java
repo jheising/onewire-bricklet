@@ -16,7 +16,7 @@ public class ExampleSimple {
 		// Don't use device before ipcon is connected
 
 		// Get current temperature (unit is °C/100)
-		short temperature = temp.getTemperature(); // Can throw IPConnection.TimeoutException
+		short temperature = temp.getTemperature(); // Can throw com.tinkerforge.TimeoutException
 
 		System.out.println("Temperature: " + temperature/100.0 + " °C");
 
