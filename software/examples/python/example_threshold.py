@@ -30,3 +30,4 @@ if __name__ == "__main__":
     t.set_temperature_callback_threshold('>', 30*100, 0)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
+    ipcon.disconnect()

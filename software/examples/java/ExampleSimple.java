@@ -21,5 +21,6 @@ public class ExampleSimple {
 		System.out.println("Temperature: " + temperature/100.0 + " °C");
 
 		System.console().readLine("Press key to exit\n");
+		ipcon.disconnect();
 	}
 }
