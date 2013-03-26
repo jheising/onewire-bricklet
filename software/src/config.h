@@ -1,5 +1,5 @@
 /* temperature-bricklet
- * Copyright (C) 2010-2012 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2010-2013 Olaf Lüke <olaf@tinkerforge.com>
  *
  * config.h: Temperature Bricklet specific configuration
  *
@@ -31,7 +31,7 @@
 
 #define BRICKLET_FIRMWARE_VERSION_MAJOR 2
 #define BRICKLET_FIRMWARE_VERSION_MINOR 0
-#define BRICKLET_FIRMWARE_VERSION_REVISION 0
+#define BRICKLET_FIRMWARE_VERSION_REVISION 1
 
 #define BRICKLET_HARDWARE_VERSION_MAJOR 1
 #define BRICKLET_HARDWARE_VERSION_MINOR 1
@@ -65,6 +65,8 @@ typedef struct {
 	char     threshold_option_save[NUM_SIMPLE_VALUES];
 
 	uint32_t tick;
+
+	uint8_t i2c_mode;
 } BrickContext;
 
 #endif

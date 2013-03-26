@@ -1,5 +1,5 @@
 /* temperature-bricklet
- * Copyright (C) 2010-2012 Olaf Lüke <olaf@tinkerforge.com>
+ * Copyright (C) 2010-2013 Olaf Lüke <olaf@tinkerforge.com>
  *
  * temperature.c: Implementation of Temperature Bricklet messages
  *
@@ -58,14 +58,40 @@ const SimpleUnitProperty sup[] = {
 const uint8_t smp_length = sizeof(smp);
 
 void invocation(const ComType com, const uint8_t *data) {
-	simple_invocation(com, data);
+	switch(((MessageHeader*)data)->fid) {
 
-	if(((MessageHeader*)data)->fid > FID_LAST) {
-		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+		case FID_GET_TEMPERATURE:
+		case FID_SET_TEMPERATURE_CALLBACK_PERIOD:
+		case FID_GET_TEMPERATURE_CALLBACK_PERIOD:
+		case FID_SET_TEMPERATURE_CALLBACK_THRESHOLD:
+		case FID_GET_TEMPERATURE_CALLBACK_THRESHOLD:
+		case FID_SET_DEBOUNCE_PERIOD:
+		case FID_GET_DEBOUNCE_PERIOD: {
+			simple_invocation(com, data);
+			break;
+		}
+
+		case FID_SET_I2C_MODE: {
+			set_i2c_mode(com, (SetI2CMode*)data);
+			break;
+		}
+
+		case FID_GET_I2C_MODE: {
+			get_i2c_mode(com, (GetI2CMode*)data);
+			break;
+		}
+
+		default: {
+			BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
+			break;
+		}
 	}
+
+
 }
 
 void constructor(void) {
+	BC->i2c_mode = I2C_MODE_FAST;
 	simple_constructor();
 }
 
@@ -101,6 +127,12 @@ int16_t temperature_read(void) {
 
 	uint16_t value;
 
+	if(BC->i2c_mode == I2C_MODE_SLOW) {
+		// Switch to 100khz
+		BA->twid->pTwi->TWI_CWGR = 0;
+		BA->twid->pTwi->TWI_CWGR = (1 << 16) | (158<< 8) | 158;
+	}
+
 	BA->bricklet_select(port);
 
 	Twi* twi = BA->twid->pTwi;
@@ -128,5 +160,29 @@ int16_t temperature_read(void) {
 
 	BA->bricklet_deselect(port);
 
+	// Switch back to 400khz
+	BA->twid->pTwi->TWI_CWGR = 0;
+	BA->twid->pTwi->TWI_CWGR = (76 << 8) | 76;
+
 	return two_complement_12_to_16(value >> 4)*TEMP_SCALE_MUL/TEMP_SCALE_DIV;
+}
+
+void get_i2c_mode(const ComType com, const GetI2CMode *data) {
+	GetI2CModeReturn gi2cmr;
+
+	gi2cmr.header         = data->header;
+	gi2cmr.header.length  = sizeof(GetI2CModeReturn);
+	gi2cmr.mode           = BC->i2c_mode;
+
+	BA->send_blocking_with_timeout(&gi2cmr, sizeof(GetI2CModeReturn), com);
+}
+
+void set_i2c_mode(const ComType com, const SetI2CMode *data) {
+	if(data->mode > I2C_MODE_SLOW) {
+		BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_INVALID_PARAMETER, com);
+		return;
+	}
+
+	BC->i2c_mode = data->mode;
+	BA->com_return_setter(com, data);
 }
