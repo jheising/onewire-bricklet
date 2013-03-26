@@ -21,8 +21,8 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Get threshold callbacks with a debounce time of 1 seconds (1000ms)
-		temp.SetDebouncePeriod(1000);
+		// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
+		temp.SetDebouncePeriod(10000);
 
 		// Register threshold reached callback to function ReachedCB
 		temp.TemperatureReached += ReachedCB;
@@ -32,5 +32,6 @@ class Example
 
 		System.Console.WriteLine("Press key to exit");
 		System.Console.ReadKey();
+		ipcon.Disconnect();
 	}
 }

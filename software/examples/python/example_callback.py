@@ -28,3 +28,4 @@ if __name__ == "__main__":
     t.register_callback(t.CALLBACK_TEMPERATURE, cb_temperature)
 
     raw_input('Press key to exit\n') # Use input() in Python 3
+    ipcon.disconnect()

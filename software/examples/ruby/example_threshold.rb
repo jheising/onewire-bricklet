@@ -30,3 +30,4 @@ t.set_temperature_callback_threshold '>', 30*100, 0
 
 puts 'Press key to exit'
 $stdin.gets
+ipcon.disconnect
