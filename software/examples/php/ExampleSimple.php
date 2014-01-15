@@ -6,14 +6,14 @@ require_once('Tinkerforge/BrickletTemperature.php');
 use Tinkerforge\IPConnection;
 use Tinkerforge\BrickletTemperature;
 
-$host = 'localhost';
-$port = 4223;
-$uid = 'XYZ'; // Change to your UID
+const HOST = 'localhost';
+const PORT = 4223;
+const UID = 'XYZ'; // Change to your UID
 
 $ipcon = new IPConnection(); // Create IP connection
-$t = new BrickletTemperature($uid, $ipcon); // Create device object
+$t = new BrickletTemperature(UID, $ipcon); // Create device object
 
-$ipcon->connect($host, $port); // Connect to brickd
+$ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected
 
 // Get current temperature (unit is °C/100)
