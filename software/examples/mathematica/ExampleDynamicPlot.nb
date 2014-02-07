@@ -1,0 +1,141 @@
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[         0,          0]
+NotebookDataLength[      5245,        140]
+NotebookOptionsPosition[      4733,        117]
+NotebookOutlinePosition[      5071,        132]
+CellTagsIndexPosition[      5028,        129]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"LoadNETAssembly", "[", 
+  RowBox[{"\"\<Tinkerforge\>\"", ",", 
+   RowBox[{
+    RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<../../..\>\""}]}], 
+  "]"}]}], "Input",
+ CellChangeTimes->{{3.600175052949191*^9, 3.600175066601799*^9}, 
+   3.600175102142559*^9, {3.6001753172765293`*^9, 3.600175317946432*^9}, {
+   3.600500538026902*^9, 3.600500561851948*^9}, {3.600506097634747*^9, 
+   3.600506099012146*^9}, 3.600506136278721*^9, {3.60060805238198*^9, 
+   3.600608117803465*^9}, 3.600685373189396*^9, {3.6007864396674213`*^9, 
+   3.6007864432843943`*^9}, {3.600787680353766*^9, 3.6007876806816196`*^9}, 
+   3.6007882647509737`*^9}],
+
+Cell[BoxData[{
+ RowBox[{"host", "=", "\"\<localhost\>\""}], "\[IndentingNewLine]", 
+ RowBox[{"port", "=", "4223"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"uid", "=", "\"\<SCT32\>\""}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", 
+  RowBox[{"(*", " ", 
+   RowBox[{
+   "Create", " ", "IPConnection", " ", "and", " ", "device", " ", "object"}], 
+   " ", "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{"ipcon", "=", 
+  RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}], "\n", 
+ RowBox[{"t", "=", 
+  RowBox[{"NETNew", "[", 
+   RowBox[{
+   "\"\<Tinkerforge.BrickletTemperature\>\"", ",", "uid", ",", "ipcon"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"ipcon", "@", 
+  RowBox[{"Connect", "[", 
+   RowBox[{"host", ",", "port"}], "]"}]}]}], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdzWkow3EcBvAlueONK2ruvBjLXdZy5AUv5siLWTmmuf7ljETCC5SMHHNt
+ZjK1lnfLkSNbpFYWcuQMk1f8jYSRYvk9vxffPvXU83zDZI2FVU4cDieCHDyS
+viepTtjMOFlCMhzOvZbCqKcDGdxxjNXAHOtiM7wtELTBcF66Ajq7XM7CRFui
+Bhq4fp0zxEFdC7V69LyX+slSa9e1tnmi98baC7SqvOxwro79hmJFyS98vGCo
+8dP6cC1yrjoSNgQ686A9VsyHTA6bDM3qH+rdXJcCNpmyx2FRgCrLiP9Zl3kw
+W3Mohgk3JRI4JZcLd4m5Y0dpsMEeyrFgb13qA1XDFf5w9c89ELrWC66YU9Ir
+8r2GlvQtFtYtnVHNHpsTtUT21aSGPJubDjL3Sj3M+Gkv1hCFKxmVcCQ6qAl2
+MflUQauoFe5Jyqmeyq9jOD9kPocxpqueZ+LjJtMHZS73A1AYY5TDjuULI+zh
+9m9D87Qh5ZP49qBNhU6x7yLIPTYWwO4HfTEULfHL4ELpfg10lE62wY8Qa7Cd
+qOQ/U/8BBFlLrA==
+  "]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Get", " ", "current", " ", "temperature", " ", 
+    RowBox[{"(", 
+     RowBox[{"unit", " ", "is", " ", 
+      RowBox[{"\[Degree]C", "/", "100"}]}], ")"}], " ", "and", " ", "plot", 
+    " ", "it"}], " ", "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"samples", "=", 
+    RowBox[{"{", "}"}]}], "\[IndentingNewLine]", 
+   RowBox[{"Dynamic", "[", 
+    RowBox[{"ListPlot", "[", 
+     RowBox[{"samples", ",", 
+      RowBox[{"Joined", "\[Rule]", "True"}], ",", 
+      RowBox[{"PlotRange", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "100"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"18", ",", "28"}], "}"}]}], "}"}]}], ",", 
+      "\[IndentingNewLine]", "                                 ", 
+      RowBox[{"Frame", "\[Rule]", "True"}], ",", 
+      RowBox[{"FrameLabel", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{"\"\<samples\>\"", ",", "\"\<Temperature [\[Degree]C]\>\""}], 
+        "}"}]}]}], "]"}], "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"RunScheduledTask", "[", 
+    RowBox[{
+     RowBox[{"AppendTo", "[", 
+      RowBox[{"samples", ",", 
+       RowBox[{"Quantity", "[", 
+        RowBox[{
+         RowBox[{"t", "@", 
+          RowBox[{"GetTemperature", "[", "]"}]}], ",", 
+         "\"\<\[Degree]C/100\>\""}], "]"}]}], "]"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "100"}], "}"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.6007863727456427`*^9, 3.6007863804737463`*^9}, {
+  3.60078654185425*^9, 3.6007866013432093`*^9}, {3.600786872455331*^9, 
+  3.600786875092909*^9}, {3.600787671426694*^9, 3.600787687039487*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Clean", " ", "up"}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"RemoveScheduledTask", "[", 
+    RowBox[{"ScheduledTasks", "[", "]"}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{"ipcon", "@", 
+    RowBox[{"Disconnect", "[", "]"}]}], "\[IndentingNewLine]", 
+   RowBox[{"ReleaseNETObject", "[", "t", "]"}], "\[IndentingNewLine]", 
+   RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.600787649088681*^9, 3.600787650304427*^9}}]
+},
+WindowSize->{1591, 901},
+WindowMargins->{{255, Automatic}, {Automatic, 61}},
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[400, 13, 732, 13, 55, "Input"],
+Cell[1135, 28, 1379, 31, 187, "Input"],
+Cell[2517, 61, 1676, 41, 143, "Input"],
+Cell[4196, 104, 533, 11, 121, "Input"]
+}
+]
+*)
+
