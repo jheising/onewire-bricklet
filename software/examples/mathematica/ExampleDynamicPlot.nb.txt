@@ -12,7 +12,7 @@ ipcon@Connect[host,port]
 
 (* Get current temperature (unit is °C/100) and plot it *)
 samples={}
-Dynamic[ListPlot[samples,Joined->True,PlotRange->{{0,100},{18,28}},
+Dynamic[ListPlot[samples,Joined->True,PlotRange->{ {0,100},{18,28} },
                  Frame->True,FrameLabel->{"samples","Temperature [°C]"}]]
 
 RunScheduledTask[AppendTo[samples,Quantity[t@GetTemperature[],"°C/100"]],{1,100}]
