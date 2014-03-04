@@ -16,7 +16,7 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function(connectReason) {
-        // Set threshold callbacks with a debounce time of 10 seconds (10000ms)
+        // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
         t.setDebouncePeriod(10000);
         // Configure threshold for "greater than 30 °C" (unit is °C/100)
         t.setTemperatureCallbackThreshold('>', 30*100, 0);       
