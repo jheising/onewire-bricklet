@@ -15,10 +15,9 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 
 # Get current temperature (unit is °C/100)
 my $temperature = $t->get_temperature()/100.0;
+print "Temperature: $temperature °C\n";
 
-print "\nTemperature: ".$temperature." °C\n";
-
-print "\nPress any key to exit...\n";
+print "Press any key to exit...\n";
 <STDIN>;
 $ipcon->disconnect();
 
