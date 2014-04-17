@@ -1,4 +1,4 @@
-function matlab_example_threshold
+function matlab_example_threshold()
     import com.tinkerforge.IPConnection;
     import com.tinkerforge.BrickletTemperature;
 
@@ -30,4 +30,3 @@ function cb_reached(e)
     fprintf('We have %g°C.\n', e.temperature/100.0);
     fprintf('It is too hot, we need air conditioning!\n');
 end
-
