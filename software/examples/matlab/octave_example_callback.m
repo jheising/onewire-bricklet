@@ -17,13 +17,13 @@ function octave_example_callback
     t.setTemperatureCallbackPeriod(1000);
 
     % Register temperature callback to function cb_temperature
-    t.addTemperatureListener("cb_temperature");
+    t.addTemperatureCallback(@cb_temperature);
     
-    input("\nPress any key to exit...\n", "s");
+    input("Press any key to exit...\n", "s");
     ipcon.disconnect();
 end
 
 % Callback function for temperature callback (parameter has unit °C/100)
-function cb_temperature(temperature_value)
-    fprintf("Temperature: %g°C\n", str2num(temperature_value.toString())/100);
+function cb_temperature(e)
+    fprintf("Temperature: %g°C\n", str2num(e.temperature.toString())/100.0);
 end

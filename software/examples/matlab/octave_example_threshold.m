@@ -15,18 +15,18 @@ function octave_example_threshold
     t.setDebouncePeriod(10000);
 
     % Register threshold reached callback to function cb_reached
-    t.addTemperatureReachedListener("cb_reached");
+    t.addTemperatureReachedCallback(@cb_reached);
 
     % Configure threshold for "greater than 30 °C" (unit is °C/100)
     t.setTemperatureCallbackThreshold(">", 30*100, 0);
 
-    input("\nPress any key to exit...\n", "s");
+    input("Press any key to exit...\n", "s");
     ipcon.disconnect();
 end
 
 % Callback for temperature greater than 30 °C
-function cb_reached(temperature_value)
-    fprintf("We have %g°C.\n", str2num(temperature_value.toString())/100.0);
+function cb_reached(e)
+    fprintf("We have %g°C.\n", str2num(e.temperature.toString())/100.0);
     fprintf("It is too hot, we need air conditioning!\n");
 end
 

@@ -16,18 +16,18 @@ function matlab_example_threshold
     t.setDebouncePeriod(10000);
 
     % Register threshold reached callback to function cb_reached
-    set(t, 'TemperatureReachedCallback', @(h, e)cb_reached(e.temperature));
+    set(t, 'TemperatureReachedCallback', @(h, e) cb_reached(e));
 
     % Configure threshold for "greater than 30 °C" (unit is °C/100)
     t.setTemperatureCallbackThreshold('>', 30*100, 0);
 
-    input('\nPress any key to exit...\n', 's');
+    input('Press any key to exit...\n', 's');
     ipcon.disconnect();
 end
 
 % Callback for temperature greater than 30 °C
-function cb_reached(temperature_value)
-    fprintf('We have %g°C.\n', temperature_value/100.0);
+function cb_reached(e)
+    fprintf('We have %g°C.\n', e.temperature/100.0);
     fprintf('It is too hot, we need air conditioning!\n');
 end
 

@@ -18,13 +18,13 @@ function matlab_example_callback
     t.setTemperatureCallbackPeriod(1000);
 
     % Register temperature callback to function cb_temperature
-    set(t, 'TemperatureCallback', @(h, e)cb_temperature(e.temperature));
+    set(t, 'TemperatureCallback', @(h, e) cb_temperature(e));
 
-    input('\nPress any key to exit...\n', 's');
+    input('Press any key to exit...\n', 's');
     ipcon.disconnect();
 end
 
 % Callback function for temperature callback (parameter has unit °C/100)
-function cb_temperature(temperature_value)
-    fprintf('Temperature: %g°C\n', temperature_value/100);
+function cb_temperature(e)
+    fprintf('Temperature: %g°C\n', e.temperature/100.0);
 end
