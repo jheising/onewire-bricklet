@@ -41,6 +41,9 @@
 
 #define SIMPLE_UNIT_TEMPERATURE 0
 
+#define TWITIMEOUTMAX 50000
+
+
 const SimpleMessageProperty smp[] = {
 	{SIMPLE_UNIT_TEMPERATURE, SIMPLE_TRANSFER_VALUE, SIMPLE_DIRECTION_GET}, // TYPE_GET_TEMPERATURE
 	{SIMPLE_UNIT_TEMPERATURE, SIMPLE_TRANSFER_PERIOD, SIMPLE_DIRECTION_SET}, // TYPE_SET_TEMPERATURE_CALLBACK_PERIOD
@@ -127,6 +130,9 @@ int16_t temperature_read(void) {
 
 	uint16_t value;
 
+    uint32_t timeout;
+	
+
 	if(BC->i2c_mode == I2C_MODE_SLOW) {
 		// Switch to 100khz
 		BA->twid->pTwi->TWI_CWGR = 0;
@@ -148,15 +154,27 @@ int16_t temperature_read(void) {
 	twi->TWI_CR = TWI_CR_START;
 
 	// Read first byte
-	while(!((twi->TWI_SR & TWI_SR_RXRDY) == TWI_SR_RXRDY));
+    timeout = 0;
+	while(!((twi->TWI_SR & TWI_SR_RXRDY) == TWI_SR_RXRDY) && (++timeout<TWITIMEOUTMAX) );
+	if (timeout == TWITIMEOUTMAX) {
+		return -9999;
+    } 
 	value = twi->TWI_RHR;
 
 	// Read second byte
     twi->TWI_CR = TWI_CR_STOP;
-	while(!((twi->TWI_SR & TWI_SR_RXRDY) == TWI_SR_RXRDY));
+    timeout = 0;
+	while(!((twi->TWI_SR & TWI_SR_RXRDY) == TWI_SR_RXRDY) && (++timeout<TWITIMEOUTMAX));
+	if (timeout == TWITIMEOUTMAX) {
+		return -9999;
+    } 
 	value = (twi->TWI_RHR | (value << 8));
 
-	while(!((twi->TWI_SR & TWI_SR_TXCOMP) == TWI_SR_TXCOMP));
+    timeout = 0;
+	while(!((twi->TWI_SR & TWI_SR_TXCOMP) == TWI_SR_TXCOMP) && (++timeout<TWITIMEOUTMAX));
+	if (timeout == TWITIMEOUTMAX) {
+		return -9999;
+    } 
 
 	BA->bricklet_deselect(port);
 
