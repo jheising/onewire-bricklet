@@ -4,3 +4,4 @@
 2.0.0: Support for protocol 2.0
 2.0.1: Add I2C Mode switch API
 2.0.2: Fix wrong length for GetDebounce packet (through brickletlib)
+2.0.3: Return -99.99°C in case of an error during communication (before it would block the whole stack)
