@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Fr 30 Dez 2011 10:20:31 CET
+EESchema Schematic File Version 2  date Fr 23 Nov 2012 11:20:24 CET
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -36,7 +36,7 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "Temperature Bricklet"
-Date "30 dec 2011"
+Date "23 nov 2012"
 Rev "1.1"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
@@ -186,7 +186,7 @@ U 1 1 4C6050A5
 P 10700 6500
 F 0 "U3" H 10750 6550 60  0001 C CNN
 F 1 "DRILL" H 10700 6500 60  0000 C CNN
-F 2 "Drill" H 10700 6500 60  0001 C CNN
+F 2 "DRILL_NP" H 10700 6500 60  0001 C CNN
 	1    10700 6500
 	1    0    0    -1  
 $EndComp
@@ -196,7 +196,7 @@ U 1 1 4C6050A2
 P 10700 6700
 F 0 "U4" H 10750 6750 60  0001 C CNN
 F 1 "DRILL" H 10700 6700 60  0000 C CNN
-F 2 "Drill" H 10700 6700 60  0001 C CNN
+F 2 "DRILL_NP" H 10700 6700 60  0001 C CNN
 	1    10700 6700
 	1    0    0    -1  
 $EndComp
@@ -206,7 +206,7 @@ U 1 1 4C60509F
 P 11050 6700
 F 0 "U6" H 11100 6750 60  0001 C CNN
 F 1 "DRILL" H 11050 6700 60  0000 C CNN
-F 2 "Drill" H 11050 6700 60  0001 C CNN
+F 2 "DRILL_NP" H 11050 6700 60  0001 C CNN
 	1    11050 6700
 	1    0    0    -1  
 $EndComp
@@ -216,7 +216,7 @@ U 1 1 4C605099
 P 11050 6500
 F 0 "U5" H 11100 6550 60  0001 C CNN
 F 1 "DRILL" H 11050 6500 60  0000 C CNN
-F 2 "Drill" H 11050 6500 60  0001 C CNN
+F 2 "DRILL_NP" H 11050 6500 60  0001 C CNN
 	1    11050 6500
 	1    0    0    -1  
 $EndComp
