@@ -51,8 +51,7 @@
                 t.on(Tinkerforge.BrickletTemperature.CALLBACK_TEMPERATURE,
                     // Callback function for temperature callback (parameter has unit °C/100)
                     function(temp) {
-                        textArea.value += 'Temperature: '+temp/100+' °C';
-                        textArea.value += '\n';
+                        textArea.value += 'Temperature: '+temp/100+' °C\n';
                         textArea.scrollTop = textArea.scrollHeight;
                     }
                 );
