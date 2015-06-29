@@ -1,9 +1,9 @@
 function octave_example_threshold()
     more off;
-    
+
     HOST = "localhost";
     PORT = 4223;
-    UID = "nmr"; % Change to your UID
+    UID = "ncM"; % Change to your UID
 
     ipcon = java_new("com.tinkerforge.IPConnection"); % Create IP connection
     t = java_new("com.tinkerforge.BrickletTemperature", UID, ipcon); % Create device object
@@ -26,7 +26,15 @@ end
 
 % Callback for temperature greater than 30 °C
 function cb_reached(e)
-    fprintf("We have %g°C.\n", str2num(e.temperature.toString())/100.0);
+    fprintf("We have %g°C.\n", short2int(e.temperature)/100.0);
     fprintf("It is too hot, we need air conditioning!\n");
+end
+
+function int = short2int(short)
+    if compare_versions(version(), "3.8", "<=")
+        int = short.intValue();
+    else
+        int = short;
+    end
 end
 

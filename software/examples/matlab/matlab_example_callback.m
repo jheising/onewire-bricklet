@@ -5,7 +5,7 @@ function matlab_example_callback()
     HOST = 'localhost';
     PORT = 4223;
     UID = 'nmr'; % Change to your UID
-    
+
     ipcon = IPConnection(); % Create IP connection
     t = BrickletTemperature(UID, ipcon); % Create device object
 
@@ -13,7 +13,7 @@ function matlab_example_callback()
     % Don't use device before ipcon is connected
 
     % Set Period for temperature callback to 1s (1000ms)
-    % Note: The callback is only called every second if the 
+    % Note: The callback is only called every second if the
     %       temperature has changed since the last call!
     t.setTemperatureCallbackPeriod(1000);
 

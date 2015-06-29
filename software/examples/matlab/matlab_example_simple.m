@@ -5,7 +5,7 @@ function matlab_example_simple()
     HOST = 'localhost';
     PORT = 4223;
     UID = 'nmr'; % Change to your UID
-    
+
     ipcon = IPConnection(); % Create IP connection
     t = BrickletTemperature(UID, ipcon); % Create device object
 
