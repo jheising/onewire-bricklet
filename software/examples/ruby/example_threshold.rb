@@ -19,9 +19,9 @@ ipcon.connect HOST, PORT # Connect to brickd
 # Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 t.set_debounce_period 10000
 
-# Register callback for temperature greater than 30 °C
+# Register threshold reached callback for temperature greater than 30 °C (parameter has unit °C/100)
 t.register_callback(BrickletTemperature::CALLBACK_TEMPERATURE_REACHED) do |temperature|
-  puts "We have #{temperature/100.0} °C."
+  puts "Temperature: #{temperature/100.0} °C"
   puts "It is too hot, we need air conditioning!"
 end
 

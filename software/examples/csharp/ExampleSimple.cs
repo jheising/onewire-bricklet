@@ -4,19 +4,18 @@ class Example
 {
 	private static string HOST = "localhost";
 	private static int PORT = 4223;
-	private static string UID = "ABC"; // Change to your UID
+	private static string UID = "XYZ"; // Change to your UID
 
-	static void Main() 
+	static void Main()
 	{
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletTemperature temp = new BrickletTemperature(UID, ipcon); // Create device object
+		BrickletTemperature t = new BrickletTemperature(UID, ipcon); // Create device object
 
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Get current temperature (unit is °C/100)
-		short temperature = temp.GetTemperature();
-
+		short temperature = t.GetTemperature();
 		System.Console.WriteLine("Temperature: " + temperature/100.0 + " °C");
 
 		System.Console.WriteLine("Press enter to exit");

@@ -11,7 +11,7 @@
 void cb_temperature(int16_t temperature, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Temperature: %f °C.\n", temperature/100.0);
+	printf("Temperature: %f °C\n", temperature/100.0);
 }
 
 int main() {
@@ -21,7 +21,7 @@ int main() {
 
 	// Create device object
 	Temperature t;
-	temperature_create(&t, UID, &ipcon); 
+	temperature_create(&t, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -30,14 +30,14 @@ int main() {
 	}
 	// Don't use device before ipcon is connected
 
-	// Set Period for temperature callback to 1s (1000ms)
-	// Note: The callback is only called every second if the 
-	//       temperature has changed since the last call!
+	// Set period for temperature callback to 1s (1000ms)
+	// Note: The temperature callback is only called every second
+	//       if the temperature has changed since the last call!
 	temperature_set_temperature_callback_period(&t, 1000);
 
 	// Register temperature callback to function cb_temperature
 	temperature_register_callback(&t,
-	                              TEMPERATURE_CALLBACK_TEMPERATURE, 
+	                              TEMPERATURE_CALLBACK_TEMPERATURE,
 	                              (void *)cb_temperature,
 	                              NULL);
 

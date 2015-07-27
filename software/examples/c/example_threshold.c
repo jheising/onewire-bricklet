@@ -7,12 +7,12 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback for temperature greater than 30 °C
-void cb_reached(int16_t temperature, void *user_data) {
+// Callback function for temperature greater than 30 °C (parameter has unit °C/100)
+void cb_temperature_reached(int16_t temperature, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("We have %f °C.\n", temperature/100.0);
-	printf("It is too hot, we need air conditioning!\n");
+	printf("Temperature: %f °C\n", temperature/100.0);
+	puts("It is too hot, we need air conditioning!");
 }
 
 int main() {
@@ -22,7 +22,7 @@ int main() {
 
 	// Create device object
 	Temperature t;
-	temperature_create(&t, UID, &ipcon); 
+	temperature_create(&t, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -30,14 +30,14 @@ int main() {
 		exit(1);
 	}
 	// Don't use device before ipcon is connected
-	//
+
 	// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 	temperature_set_debounce_period(&t, 10000);
 
-	// Register threshold reached callback to function cb_reached
+	// Register threshold reached callback to function cb_temperature_reached
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE_REACHED,
-	                              (void *)cb_reached,
+	                              (void *)cb_temperature_reached,
 	                              NULL);
 
 	// Configure threshold for "greater than 30 °C" (unit is °C/100)

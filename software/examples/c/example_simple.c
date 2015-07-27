@@ -14,7 +14,7 @@ int main() {
 
 	// Create device object
 	Temperature t;
-	temperature_create(&t, UID, &ipcon); 
+	temperature_create(&t, UID, &ipcon);
 
 	// Connect to brickd
 	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
@@ -26,7 +26,7 @@ int main() {
 	// Get current temperature (unit is °C/100)
 	int16_t temperature;
 	if(temperature_get_temperature(&t, &temperature) < 0) {
-		fprintf(stderr, "Could not get value, probably timeout\n");
+		fprintf(stderr, "Could not get temperature, probably timeout\n");
 		exit(1);
 	}
 
