@@ -22,7 +22,7 @@ t.set_debounce_period 10000
 # Register threshold reached callback for temperature greater than 30 °C (parameter has unit °C/100)
 t.register_callback(BrickletTemperature::CALLBACK_TEMPERATURE_REACHED) do |temperature|
   puts "Temperature: #{temperature/100.0} °C"
-  puts "It is too hot, we need air conditioning!"
+  puts 'It is too hot, we need air conditioning!'
 end
 
 # Configure threshold for "greater than 30 °C" (unit is °C/100)
