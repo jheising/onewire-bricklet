@@ -19,12 +19,12 @@ type
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = '8o9'; { Change to your UID }
+  UID = 'XYZ'; { Change to your UID }
 
 var
   e: TExample;
 
-{ Callback function for temperature callback (parameter has unit °C/100) }
+{ Callback procedure for temperature callback (parameter has unit °C/100) }
 procedure TExample.TemperatureCB(sender: TBrickletTemperature; const temperature: smallint);
 begin
   WriteLn(Format('Temperature: %f °C', [temperature/100.0]));
@@ -42,9 +42,9 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Set Period for temperature callback to 1s (1000ms)
-    Note: The temperature callback is only called every second if the
-          temperature has changed since the last call! }
+  { Set period for temperature callback to 1s (1000ms)
+    Note: The temperature callback is only called every second
+          if the temperature has changed since the last call! }
   t.SetTemperatureCallbackPeriod(1000);
 
   { Register temperature callback to procedure TemperatureCB }
