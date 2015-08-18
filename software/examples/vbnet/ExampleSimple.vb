@@ -3,7 +3,7 @@ Imports Tinkerforge
 Module ExampleSimple
     Const HOST As String = "localhost"
     Const PORT As Integer = 4223
-    Const UID As String = "aNB" ' Change to your UID
+    Const UID As String = "XYZ" ' Change to your UID
 
     Sub Main()
         Dim ipcon As New IPConnection() ' Create IP connection
@@ -14,7 +14,6 @@ Module ExampleSimple
 
         ' Get current temperature (unit is °C/100)
         Dim temperature As Short = t.GetTemperature()
-
         System.Console.WriteLine("Temperature: " + (temperature/100.0).ToString() + " °C")
 
         System.Console.WriteLine("Press key to exit")
