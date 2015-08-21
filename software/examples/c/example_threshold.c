@@ -12,7 +12,7 @@ void cb_temperature_reached(int16_t temperature, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
 	printf("Temperature: %f °C\n", temperature/100.0);
-	puts("It is too hot, we need air conditioning!");
+	printf("It is too hot, we need air conditioning!\n");
 }
 
 int main(void) {
