@@ -7,7 +7,7 @@
 #define PORT 4223
 #define UID "XYZ" // Change to your UID
 
-// Callback function for temperature greater than 30 °C (parameter has unit °C/100)
+// Callback function for temperature reached callback (parameter has unit °C/100)
 void cb_temperature_reached(int16_t temperature, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
@@ -34,13 +34,13 @@ int main(void) {
 	// Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 	temperature_set_debounce_period(&t, 10000);
 
-	// Register threshold reached callback to function cb_temperature_reached
+	// Register temperature reached callback to function cb_temperature_reached
 	temperature_register_callback(&t,
 	                              TEMPERATURE_CALLBACK_TEMPERATURE_REACHED,
 	                              (void *)cb_temperature_reached,
 	                              NULL);
 
-	// Configure threshold for "greater than 30 °C" (unit is °C/100)
+	// Configure threshold for temperature "greater than 30 °C" (unit is °C/100)
 	temperature_set_temperature_callback_threshold(&t, '>', 30*100, 0);
 
 	printf("Press key to exit\n");

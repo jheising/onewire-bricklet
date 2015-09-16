@@ -17,9 +17,8 @@ $ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected
 
 // Get current temperature (unit is °C/100)
-$temperature = $t->getTemperature() / 100.0;
-
-echo "Temperature: $temperature °C\n";
+$temperature = $t->getTemperature();
+echo "Temperature: " . $temperature/100.0 . " °C\n";
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));

@@ -10,10 +10,10 @@ const HOST = 'localhost';
 const PORT = 4223;
 const UID = 'XYZ'; // Change to your UID
 
-// Callback for temperature greater than 30 °C
-function cb_reached($temperature)
+// Callback function for temperature reached callback (parameter has unit °C/100)
+function cb_temperatureReached($temperature)
 {
-    echo "We have " . $temperature / 100.0 . " °C.\n";
+    echo "Temperature: " . $temperature/100.0 . " °C\n";
     echo "It is too hot, we need air conditioning!\n";
 }
 
@@ -26,10 +26,10 @@ $ipcon->connect(HOST, PORT); // Connect to brickd
 // Get threshold callbacks with a debounce time of 10 seconds (10000ms)
 $t->setDebouncePeriod(10000);
 
-// Register threshold reached callback to function cb_reached
-$t->registerCallback(BrickletTemperature::CALLBACK_TEMPERATURE_REACHED, 'cb_reached');
+// Register temperature reached callback to function cb_temperatureReached
+$t->registerCallback(BrickletTemperature::CALLBACK_TEMPERATURE_REACHED, 'cb_temperatureReached');
 
-// Configure threshold for "greater than 30 °C" (unit is °C/100)
+// Configure threshold for temperature "greater than 30 °C" (unit is °C/100)
 $t->setTemperatureCallbackThreshold('>', 30*100, 0);
 
 echo "Press ctrl+c to exit\n";

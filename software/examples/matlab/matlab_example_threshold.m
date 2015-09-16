@@ -4,7 +4,7 @@ function matlab_example_threshold()
 
     HOST = 'localhost';
     PORT = 4223;
-    UID = 'nmr'; % Change to your UID
+    UID = 'XYZ'; % Change to your UID
 
     ipcon = IPConnection(); % Create IP connection
     t = BrickletTemperature(UID, ipcon); % Create device object
@@ -15,18 +15,18 @@ function matlab_example_threshold()
     % Get threshold callbacks with a debounce time of 10 seconds (10000ms)
     t.setDebouncePeriod(10000);
 
-    % Register threshold reached callback to function cb_reached
-    set(t, 'TemperatureReachedCallback', @(h, e) cb_reached(e));
+    % Register temperature reached callback to function cb_temperature_reached
+    set(t, 'TemperatureReachedCallback', @(h, e) cb_temperature_reached(e));
 
-    % Configure threshold for "greater than 30 °C" (unit is °C/100)
+    % Configure threshold for temperature "greater than 30 °C" (unit is °C/100)
     t.setTemperatureCallbackThreshold('>', 30*100, 0);
 
-    input('Press any key to exit...\n', 's');
+    input('Press key to exit\n', 's');
     ipcon.disconnect();
 end
 
-% Callback for temperature greater than 30 °C
-function cb_reached(e)
-    fprintf('We have %g°C.\n', e.temperature/100.0);
+% Callback function for temperature reached callback (parameter has unit °C/100)
+function cb_temperature_reached(e)
+    fprintf('Temperature: %g °C\n', e.temperature/100.0);
     fprintf('It is too hot, we need air conditioning!\n');
 end
