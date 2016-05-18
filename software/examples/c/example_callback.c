@@ -43,6 +43,7 @@ int main(void) {
 
 	printf("Press key to exit\n");
 	getchar();
+	temperature_destroy(&t);
 	ipcon_destroy(&ipcon); // Calls ipcon_disconnect internally
 	return 0;
 }
