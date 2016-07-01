@@ -8,7 +8,7 @@ use Tinkerforge\BrickletTemperature;
 
 const HOST = 'localhost';
 const PORT = 4223;
-const UID = 'XYZ'; // Change to your UID
+const UID = 'XYZ'; // Change XYZ to the UID of your Temperature Bricklet
 
 // Callback function for temperature callback (parameter has unit °C/100)
 function cb_temperature($temperature)

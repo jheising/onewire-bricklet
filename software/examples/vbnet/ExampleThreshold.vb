@@ -4,10 +4,11 @@ Imports Tinkerforge
 Module ExampleThreshold
     Const HOST As String = "localhost"
     Const PORT As Integer = 4223
-    Const UID As String = "XYZ" ' Change to your UID
+    Const UID As String = "XYZ" ' Change XYZ to the UID of your Temperature Bricklet
 
     ' Callback subroutine for temperature reached callback (parameter has unit °C/100)
-    Sub TemperatureReachedCB(ByVal sender As BrickletTemperature, ByVal temperature As Short)
+    Sub TemperatureReachedCB(ByVal sender As BrickletTemperature, _
+                             ByVal temperature As Short)
         Console.WriteLine("Temperature: " + (temperature/100.0).ToString() + " °C")
         Console.WriteLine("It is too hot, we need air conditioning!")
     End Sub

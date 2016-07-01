@@ -19,13 +19,14 @@ type
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = 'XYZ'; { Change to your UID }
+  UID = 'XYZ'; { Change XYZ to the UID of your Temperature Bricklet }
 
 var
   e: TExample;
 
 { Callback procedure for temperature callback (parameter has unit °C/100) }
-procedure TExample.TemperatureCB(sender: TBrickletTemperature; const temperature: smallint);
+procedure TExample.TemperatureCB(sender: TBrickletTemperature;
+                                 const temperature: smallint);
 begin
   WriteLn(Format('Temperature: %f °C', [temperature/100.0]));
 end;
