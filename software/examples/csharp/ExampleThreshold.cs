@@ -26,7 +26,7 @@ class Example
 		t.SetDebouncePeriod(10000);
 
 		// Register temperature reached callback to function TemperatureReachedCB
-		t.TemperatureReached += TemperatureReachedCB;
+		t.TemperatureReachedCallback += TemperatureReachedCB;
 
 		// Configure threshold for temperature "greater than 30 °C" (unit is °C/100)
 		t.SetTemperatureCallbackThreshold('>', 30*100, 0);
