@@ -11,7 +11,7 @@ tinkerforge dispatch temperature-bricklet $uid temperature-reached\
  --execute "echo Temperature: {temperature} °C/100. It is too hot, we need air conditioning!" &
 
 # Configure threshold for temperature "greater than 30 °C" (unit is °C/100)
-tinkerforge call temperature-bricklet $uid set-temperature-callback-threshold greater 3000 0
+tinkerforge call temperature-bricklet $uid set-temperature-callback-threshold threshold-option-greater 3000 0
 
 echo "Press key to exit"; read dummy
 
