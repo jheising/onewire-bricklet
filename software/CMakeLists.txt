@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 
-SET(PROJECT_NAME temperature-bricklet)
+SET(PROJECT_NAME onewire-bricklet)
 SET(CHIP sam3s4)
 SET(BOARD sam3s-ek)
 SET(MCU cortex-m3\ -mthumb)

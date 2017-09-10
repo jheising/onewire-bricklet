@@ -24,4 +24,4 @@
 
 #include "brickletlib/bricklet_entry.c"
 #include "brickletlib/bricklet_simple.c"
-#include "temperature.c"
+#include "onewire.c"
