@@ -50,37 +50,7 @@ uint8_t DS2482_readByte();
 bool DS2482_readBytes(uint8_t* data, uint8_t length);
 bool DS2482_writeByte(uint8_t data);
 bool DS2482_writeBytes(uint8_t *data, uint8_t length);
-uint8_t DS2482_get_address(void);
-
-/*#define PTR_STATUS 0xf0
-#define PTR_READ 0xe1
-#define PTR_CONFIG 0xc3
-
-#define DS2482_CONFIG_APU (1<<0)
-#define DS2482_CONFIG_PPM (1<<1)
-#define DS2482_CONFIG_SPU (1<<2)
-#define DS2484_CONFIG_WS  (1<<3)
-
-#define DS2482_STATUS_BUSY 	(1<<0)
-#define DS2482_STATUS_PPD 	(1<<1)
-#define DS2482_STATUS_SD	(1<<2)
-#define DS2482_STATUS_LL	(1<<3)
-#define DS2482_STATUS_RST	(1<<4)
-#define DS2482_STATUS_SBR	(1<<5)
-#define DS2482_STATUS_TSB	(1<<6)
-#define DS2482_STATUS_DIR	(1<<7)
-
-void DS2482_setReadPtr(uint8_t readPtr);
-uint8_t DS2482_wireReadStatus(bool setPtr);
-uint8_t DS2482_busyWait(bool setReadPtr);
-void DS2482_reset();
-bool DS2482_configure(uint8_t config);
-bool DS2482_wireReset();
-void DS2482_wireWriteByte(uint8_t b);
-uint8_t DS2482_wireReadByte();
-void DS2482_wireWriteBit(uint8_t bit);
-void DS2482_wireResetSearch();
-uint8_t DS2482_wireSearch(uint8_t *newAddr);*/
+uint8_t DS2482_getAddress(void);
 
 
 #define DS2482_COMMAND_RESET		0xF0	// Device reset
@@ -117,16 +87,9 @@ uint8_t DS2482_wireSearch(uint8_t *newAddr);*/
 #define DS2482_ERROR_SHORT			(1<<1)
 #define DS2482_ERROR_CONFIG			(1<<2)
 
-void DS2482_deviceReset();
-void DS2482_setReadPointer(uint8_t readPointer);
-uint8_t DS2482_readStatus();
-uint8_t DS2482_waitOnBusy();
-uint8_t DS2482_wireReset();
-void DS2482_wireResetSearch();
-uint8_t DS2482_wireSearch(uint8_t *address);
-void DS2482_wireWriteByte(uint8_t data);
-void DS2482_writeConfig(uint8_t config);
-uint8_t DS2482_readConfig();
-void DS2482_clearStrongPullup();
+void DS2482_beginAndWrite(uint8_t byteToWrite);
+uint8_t DS2482_end();
+void DS2482_writeByte(uint8_t data);
+uint8_t DS2482_readByte();
 
 #endif

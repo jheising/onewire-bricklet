@@ -26,6 +26,7 @@
 #include "bricklib/bricklet/bricklet_communication.h"
 #include "bricklib/utility/util_definitions.h"
 #include "config.h"
+#include "bricklib/drivers/twi/twi.h"
 
 #define I2C_EEPROM_ADDRESS_HIGH 84
 
@@ -58,6 +59,14 @@ void invocation(const ComType com, const uint8_t *data) {
 	}
 }
 
+uint8_t DS2482_getAddress(void) {
+	if(BS->address == I2C_EEPROM_ADDRESS_HIGH) {
+		return I2C_ADDRESS_HIGH;
+	} else {
+		return I2C_ADDRESS_LOW;
+	}
+}
+
 void get_device_addresses(const ComType com, const GetDeviceAddresses *data) {
     GetDeviceAddressesReturn response;
 
@@ -71,163 +80,228 @@ void get_device_addresses(const ComType com, const GetDeviceAddresses *data) {
 void tick(const uint8_t tick_type) {
 }
 
-// -----------------------------------------------
+// --------------------------------------------------------------------------------
 
+// Helper functions to make dealing with I2C side easier
+void DS2482_beginAndWrite(uint8_t byteToWrite)
+{
+    if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
+        BA->bricklet_select(BS->port - 'a');
+        TWI_StartWrite(BA->twid, DS2482_getAddress(), NULL, NULL, byteToWrite);
+        while(!TWI_ByteSent(BA->twid));
+	}
+}
+
+uint8_t DS2482_end()
+{
+    TWI_Stop(BA->twid);
+
+    while(!TWI_TransferComplete(BA->twid));
+
+    BA->bricklet_deselect(BS->port - 'a');
+    BA->mutex_give(*BA->mutex_twi_bricklet);
+}
+
+void DS2482_writeByte(uint8_t data)
+{
+    TWI_WriteByte(BA->twid, data);
+    while(!TWI_ByteSent(BA->twid));
+}
 
 uint8_t DS2482_readByte()
 {
-    uint8_t theByte = 0;
-    DS2482_readBytes(&theByte, 1);
-    return theByte;
-}
-
-bool DS2482_readBytes(uint8_t* data, uint8_t length)
-{
-	if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
+    if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
+        uint8_t value;
 
         BA->bricklet_select(BS->port - 'a');
-        BA->TWID_Read(BA->twid, DS2482_get_address(), 0x0, 0x0, data, length, NULL);
+        BA->TWID_Read(BA->twid, DS2482_getAddress(), NULL, NULL, &value, 1, NULL);
+
         BA->bricklet_deselect(BS->port - 'a');
         BA->mutex_give(*BA->mutex_twi_bricklet);
 
-        return true;
+        return value;
     }
 
-    return false;
+    return 0;
 }
 
-bool DS2482_writeByte(uint8_t data)
+/*// Simply starts and ends an Wire transmission
+// If no devices are present, this returns false
+uint8_t DS2482_checkPresence()
 {
-    return DS2482_writeBytes(&data, 1);
+	begin();
+	return !end() ? true : false;
 }
 
-bool DS2482_writeBytes(uint8_t *data, uint8_t length)
+// Performs a global reset of device state machine logic. Terminates any ongoing 1-Wire communication.
+void DS2482_deviceReset()
 {
-	if(BA->mutex_take(*BA->mutex_twi_bricklet, 10)) {
-
-        BA->bricklet_select(BS->port - 'a');
-        BA->TWID_Write(BA->twid, DS2482_get_address(), 0x0, 0x0, data, length, NULL);
-        BA->bricklet_deselect(BS->port - 'a');
-        BA->mutex_give(*BA->mutex_twi_bricklet);
-
-        return true;
-    }
-
-    return false;
-}
-
-uint8_t DS2482_get_address(void) {
-	if(BS->address == I2C_EEPROM_ADDRESS_HIGH) {
-		return I2C_ADDRESS_HIGH;
-	} else {
-		return I2C_ADDRESS_LOW;
-	}
-}
-
-// ----------------------------------------------------------------------------------------------------------------------------------
-
-// Write to the config register
-void DS2482_writeConfig(uint8_t config)
-{
-	//DS2482_waitOnBusy();
-	DS2482_writeByte(DS2482_COMMAND_WRITECONFIG);
-	// Write the 4 bits and the complement 4 bits
-	DS2482_writeByte(config | (~config) << 4);
-
-	// This should return the config bits without the complement
-	if (DS2482_readByte() != config)
-	{
-	    BC->mError = DS2482_ERROR_CONFIG;
-	}
-}
-
-// Read the config register
-uint8_t DS2482_readConfig()
-{
-	DS2482_setReadPointer(DS2482_POINTER_CONFIG);
-	return DS2482_readByte();
+	begin();
+	write(DS2482_COMMAND_RESET);
+	end();
 }
 
 // Sets the read pointer to the specified register. Overwrites the read pointer position of any 1-Wire communication command in progress.
 void DS2482_setReadPointer(uint8_t readPointer)
 {
-	DS2482_writeByte(DS2482_COMMAND_SRP);
-	DS2482_writeByte(readPointer);
+	begin();
+	writeByte(DS2482_COMMAND_SRP);
+	writeByte(readPointer);
+	end();
 }
 
 // Read the status register
 uint8_t DS2482_readStatus()
 {
-	DS2482_setReadPointer(DS2482_POINTER_STATUS);
-	return DS2482_readByte();
+	setReadPointer(DS2482_POINTER_STATUS);
+	return readByte();
 }
 
+// Read the data register
+uint8_t DS2482_readData()
+{
+	setReadPointer(DS2482_POINTER_DATA);
+	return readByte();
+}
+
+// Read the config register
+uint8_t DS2482_readConfig()
+{
+	setReadPointer(DS2482_POINTER_CONFIG);
+	return readByte();
+}
+
+void DS2482_setStrongPullup()
+{
+	writeConfig(readConfig() | DS2482_CONFIG_SPU);
+}
+
+void DS2482_clearStrongPullup()
+{
+	writeConfig(readConfig() & !DS2482_CONFIG_SPU);
+}
+
+// Churn until the busy bit in the status register is clear
 uint8_t DS2482_waitOnBusy()
 {
 	uint8_t status;
 
 	for(int i=1000; i>0; i--)
 	{
-		status = DS2482_readStatus();
+		status = readStatus();
 		if (!(status & DS2482_STATUS_BUSY))
 			break;
-		SLEEP_US(20);
+		delayMicroseconds(20);
 	}
 
 	// if we have reached this point and we are still busy, there is an error
 	if (status & DS2482_STATUS_BUSY)
-		BC->mError = DS2482_ERROR_TIMEOUT;
+		mError = DS2482_ERROR_TIMEOUT;
 
 	// Return the status so we don't need to explicitly do it again
 	return status;
 }
 
-void DS2482_deviceReset()
+// Write to the config register
+void DS2482_writeConfig(uint8_t config)
 {
-    BC->mError = 0;
-	DS2482_writeByte(DS2482_COMMAND_RESET);
-}
+	waitOnBusy();
+	begin();
+	writeByte(DS2482_COMMAND_WRITECONFIG);
+	// Write the 4 bits and the complement 4 bits
+	writeByte(config | (~config)<<4);
+	end();
+	
+	// This should return the config bits without the complement
+	if (readByte() != config)
+		mError = DS2482_ERROR_CONFIG;
+}*/
 
-void DS2482_clearStrongPullup()
+// Generates a 1-Wire reset/presence-detect cycle (Figure 4) at the 1-Wire line. The state
+// of the 1-Wire line is sampled at tSI and tMSP and the result is reported to the host 
+// processor through the Status Register, bits PPD and SD.
+/*uint8_t DS2482_wireReset()
 {
-	DS2482_writeConfig(DS2482_readConfig() & !DS2482_CONFIG_SPU);
-}
-
-uint8_t DS2482_wireReset()
-{
-	DS2482_waitOnBusy();
+	waitOnBusy();
 	// Datasheet warns that reset with SPU set can exceed max ratings
-	DS2482_clearStrongPullup();
+	clearStrongPullup();
 
-	DS2482_waitOnBusy();
+	waitOnBusy();
 
-	DS2482_writeByte(DS2482_COMMAND_RESETWIRE);
+	begin();
+	writeByte(DS2482_COMMAND_RESETWIRE);
+	end();
 
-	uint8_t status = DS2482_waitOnBusy();
+	uint8_t status = waitOnBusy();
 
 	if (status & DS2482_STATUS_SD)
 	{
-		BC->mError = DS2482_ERROR_SHORT;
+		mError = DS2482_ERROR_SHORT;
 	}
 
 	return (status & DS2482_STATUS_PPD) ? true : false;
 }
 
 // Writes a single data byte to the 1-Wire line.
-void DS2482_wireWriteByte(uint8_t data)
+void DS2482_wireWriteByte(uint8_t data, uint8_t power)
 {
-	DS2482_waitOnBusy();
-	//if (power)
-	//	setStrongPullup();
-	DS2482_writeByte(DS2482_COMMAND_WRITEBYTE);
-	DS2482_writeByte(data);
+	waitOnBusy();
+	if (power)
+		setStrongPullup();
+	begin();
+	writeByte(DS2482_COMMAND_WRITEBYTE);
+	writeByte(data);
+	end();
 }
 
-uint8_t searchLastDeviceFlag = 0;
-uint8_t searchAddress[8];
-uint8_t searchLastDiscrepancy = 0;
+// Generates eight read-data time slots on the 1-Wire line and stores result in the Read Data Register.
+uint8_t DS2482_wireReadByte()
+{
+	waitOnBusy();
+	begin();
+	writeByte(DS2482_COMMAND_READBYTE);
+	end();
+	waitOnBusy();
+	return readData();
+}
 
-//  1-Wire reset search algorithm
+// Generates a single 1-Wire time slot with a bit value “V” as specified by the bit byte at the 1-Wire line
+// (see Table 2). A V value of 0b generates a write-zero time slot (Figure 5); a V value of 1b generates a 
+// write-one time slot, which also functions as a read-data time slot (Figure 6). In either case, the logic
+// level at the 1-Wire line is tested at tMSR and SBR is updated.
+void DS2482_wireWriteBit(uint8_t data, uint8_t power)
+{
+	waitOnBusy();
+	if (power)
+		setStrongPullup();
+	begin();
+	writeByte(DS2482_COMMAND_SINGLEBIT);
+	writeByte(data ? 0x80 : 0x00);
+	end();
+}
+
+// As wireWriteBit
+uint8_t DS2482_wireReadBit()
+{
+	wireWriteBit(1);
+	uint8_t status = waitOnBusy();
+	return status & DS2482_STATUS_SBR ? 1 : 0;
+}
+
+// 1-Wire skip
+void DS2482_wireSkip()
+{
+	wireWriteByte(WIRE_COMMAND_SKIP);
+}
+
+void DS2482_wireSelect(const uint8_t rom[8])
+{
+	wireWriteByte(WIRE_COMMAND_SELECT);
+	for (int i=0;i<8;i++)
+		wireWriteByte(rom[i]);
+}
+
+//  1-Wire reset seatch algorithm
 void DS2482_wireResetSearch()
 {
 	searchLastDiscrepancy = 0;
@@ -237,33 +311,28 @@ void DS2482_wireResetSearch()
 	{
 		searchAddress[i] = 0;
 	}
+
 }
 
+// Perform a search of the 1-Wire bus
 uint8_t DS2482_wireSearch(uint8_t *address)
 {
 	uint8_t direction;
 	uint8_t last_zero=0;
 
 	if (searchLastDeviceFlag)
-	{
-	    address[0] = 21;
-	    return 0;
-	}
+		return 0;
 
+	if (!wireReset())
+		return 0;
 
-	if (!DS2482_wireReset())
-	{
-	    address[0] = 22;
-	    return 0;
-	}
+	waitOnBusy();
 
-	DS2482_waitOnBusy();
-
-	DS2482_wireWriteByte(WIRE_COMMAND_SEARCH);
+	wireWriteByte(WIRE_COMMAND_SEARCH);
 
 	for(uint8_t i=0;i<64;i++)
 	{
-		int searchByte = i / 8;
+		int searchByte = i / 8; 
 		int searchBit = 1 << i % 8;
 
 		if (i < searchLastDiscrepancy)
@@ -271,11 +340,13 @@ uint8_t DS2482_wireSearch(uint8_t *address)
 		else
 			direction = i == searchLastDiscrepancy;
 
-		DS2482_waitOnBusy();
-		DS2482_writeByte(DS2482_COMMAND_TRIPLET);
-		DS2482_writeByte(direction ? 0x80 : 0x00);
+		waitOnBusy();
+		begin();
+		writeByte(DS2482_COMMAND_TRIPLET);
+		writeByte(direction ? 0x80 : 0x00);
+		end();
 
-		uint8_t status = DS2482_waitOnBusy();
+		uint8_t status = waitOnBusy();
 
 		uint8_t id = status & DS2482_STATUS_SBR;
 		uint8_t comp_id = status & DS2482_STATUS_TSB;
@@ -283,7 +354,6 @@ uint8_t DS2482_wireSearch(uint8_t *address)
 
 		if (id && comp_id)
 		{
-		    address[0] = 23;
 			return 0;
 		}
 		else
@@ -304,175 +374,10 @@ uint8_t DS2482_wireSearch(uint8_t *address)
 	searchLastDiscrepancy = last_zero;
 
 	if (!last_zero)
-	{
-	    searchLastDeviceFlag = 1;
-	}
+		searchLastDeviceFlag = 1;
 
 	for (uint8_t i=0; i<8; i++)
-	{
-	    address[i] = searchAddress[i];
-	}
-
-	return 1;
-}
-
-/*void DS2482_setReadPtr(uint8_t readPtr)
-{
-
-	DS2482_writeByte(0xe1);  // changed from 'send' to 'write' according http://blog.makezine.com/2011/12/01/arduino-1-0-is-out-heres-what-you-need-to-know/'
-	DS2482_writeByte(readPtr);
-
-}
-
-uint8_t DS2482_wireReadStatus(bool setPtr)
-{
-	if (setPtr)
-		DS2482_setReadPtr(PTR_STATUS);
-
-	return DS2482_readByte();
-}
-
-uint8_t DS2482_busyWait(bool setReadPtr)
-{
-	uint8_t status;
-	int loopCount = 1000;
-	while((status = DS2482_wireReadStatus(setReadPtr)) & DS2482_STATUS_BUSY)
-	{
-		if (--loopCount <= 0)
-		{
-			BC->mTimeout = 1;
-			break;
-		}
-		SLEEP_US(20);
-	}
-	return status;
-}
-
-//----------interface
-void DS2482_reset()
-{
-	BC->mTimeout = 0;
-	DS2482_writeByte(0xf0);
-}
-
-bool DS2482_configure(uint8_t config)
-{
-	DS2482_busyWait(true);
-
-	DS2482_writeByte(0xd2);
-	DS2482_writeByte(config | (~config)<<4);
-
-
-	return DS2482_readByte() == config;
-}
-
-bool DS2482_wireReset()
-{
-	DS2482_busyWait(true);
-
-	DS2482_writeByte(0xb4);
-
-	uint8_t status = DS2482_busyWait(false);
-
-	return status & DS2482_STATUS_PPD ? true : false;
-}
-
-
-void DS2482_wireWriteByte(uint8_t b)
-{
-	DS2482_busyWait(true);
-
-	DS2482_writeByte(0xa5);
-	DS2482_writeByte(b);
-}
-
-uint8_t DS2482_wireReadByte()
-{
-	DS2482_busyWait(true);
-
-	DS2482_writeByte(0x96);
-
-	DS2482_busyWait(false);
-	DS2482_setReadPtr(PTR_READ);
-	return DS2482_readByte();
-}
-
-void DS2482_wireWriteBit(uint8_t bit)
-{
-	DS2482_busyWait(true);
-
-	DS2482_writeByte(0x87);
-	DS2482_writeByte(bit ? 0x80 : 0);
-
-}
-
-
-void DS2482_wireResetSearch()
-{
-	BC->searchExhausted = 0;
-	BC->searchLastDisrepancy = 0;
-
-	for(uint8_t i = 0; i<8; i++)
-		BC->searchAddress[i] = 0;
-}
-
-uint8_t DS2482_wireSearch(uint8_t *newAddr)
-{
-	uint8_t i;
-	uint8_t direction;
-	uint8_t last_zero=0;
-
-	if (BC->searchExhausted)
-		return 0;
-
-	if (!DS2482_wireReset())
-		return 0;
-
-	DS2482_busyWait(true);
-	DS2482_wireWriteByte(0xf0);
-
-	for(i=1;i<65;i++)
-	{
-		int romByte = (i-1)>>3;
-		int romBit = 1<<((i-1)&7);
-
-		if (i < BC->searchLastDisrepancy)
-			direction = BC->searchAddress[romByte] & romBit;
-		else
-			direction = i == BC->searchLastDisrepancy;
-
-		DS2482_busyWait(false);
-
-		DS2482_writeByte(0x78);
-		DS2482_writeByte(direction ? 0x80 : 0);
-
-		uint8_t status = DS2482_busyWait(false);
-
-		uint8_t id = status & DS2482_STATUS_SBR;
-		uint8_t comp_id = status & DS2482_STATUS_TSB;
-		direction = status & DS2482_STATUS_DIR;
-
-		if (id && comp_id)
-			return 0;
-		else
-		{
-			if (!id && !comp_id && !direction)
-				last_zero = i;
-		}
-
-		if (direction)
-			BC->searchAddress[romByte] |= romBit;
-		else
-			BC->searchAddress[romByte] &= (uint8_t)~romBit;
-	}
-
-	BC->searchLastDisrepancy = last_zero;
-
-	if (last_zero == 0)
-		BC->searchExhausted = 1;
-
-	for (i=0;i<8;i++)
-		newAddr[i] = BC->searchAddress[i];
+		address[i] = searchAddress[i];
 
 	return 1;
 }*/
