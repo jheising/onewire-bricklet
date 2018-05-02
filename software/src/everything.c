@@ -23,5 +23,6 @@
 
 
 #include "brickletlib/bricklet_entry.c"
-#include "brickletlib/bricklet_simple.c"
+#include "bricklib/drivers/twi/twi.c"
+#include "DS2482.c"
 #include "onewire.c"

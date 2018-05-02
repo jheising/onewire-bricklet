@@ -26,70 +26,70 @@
 
 #include "bricklib/com/com_common.h"
 
-#define FID_GET_NEXT_ADDRESS 1
-#define MAX_DEVICE_ADDRESSES 1
+#define FID_WIRE_RESET 1
+#define FID_WIRE_RESET_SEARCH 2
+#define FID_WIRE_SEARCH 3
+#define FID_WIRE_WRITE_BIT 4
+#define FID_WIRE_READ_BIT 5
+#define FID_WIRE_WRITE_BYTE 6
+#define FID_WIRE_READ_BYTE 7
+#define FID_WIRE_SELECT 8
+#define FID_WIRE_SKIP 9
+#define FID_SET_DS2482_CONFIG 10
+#define FID_GET_DS2482_CONFIG 11
+#define FID_RESET_DS2482 12
 
 typedef struct {
 	MessageHeader header;
-} __attribute__((__packed__)) GetDeviceAddresses;
+} __attribute__((__packed__)) EmptyMessage;
 
 typedef struct {
 	MessageHeader header;
-	uint8_t addresses[8];
-} __attribute__((__packed__)) GetDeviceAddressesReturn;
+	uint8_t theByte;
+} __attribute__((__packed__)) ByteMessage;
+
+typedef struct {
+	MessageHeader header;
+	int16_t theTemp;
+} __attribute__((__packed__)) TwoByteMessage;
+
+typedef struct {
+	MessageHeader header;
+	uint8_t address[8];
+} __attribute__((__packed__)) WireAddressMessage;
+
+typedef struct {
+	MessageHeader header;
+	uint8_t address[8];
+	uint8_t moreAvailable;
+} __attribute__((__packed__)) WireSearchMessage;
+
+typedef struct {
+	MessageHeader header;
+	uint8_t activePullup;
+	uint8_t strongPullup;
+	uint8_t speed;
+} __attribute__((__packed__)) DS2482ConfigMessage;
 
 void invocation(const ComType com, const uint8_t *data);
 void constructor(void);
 void destructor(void);
 void tick(const uint8_t tick_type);
 
-void get_device_addresses(const ComType com, const GetDeviceAddresses *data);
-
-void DS2482_setReadPtr(uint8_t readPtr);
-uint8_t DS2482_readByte();
-bool DS2482_readBytes(uint8_t* data, uint8_t length);
-bool DS2482_writeByte(uint8_t data);
-bool DS2482_writeBytes(uint8_t *data, uint8_t length);
-uint8_t DS2482_getAddress(void);
-
-
-#define DS2482_COMMAND_RESET		0xF0	// Device reset
-
-#define DS2482_COMMAND_SRP			0xE1 	// Set read pointer
-	#define DS2482_POINTER_STATUS		0xF0
-		#define DS2482_STATUS_BUSY			(1<<0)
-		#define DS2482_STATUS_PPD			(1<<1)
-		#define DS2482_STATUS_SD			(1<<2)
-		#define DS2482_STATUS_LL			(1<<3)
-		#define DS2482_STATUS_RST 			(1<<4)
-		#define DS2482_STATUS_SBR			(1<<5)
-		#define DS2482_STATUS_TSB 			(1<<6)
-		#define DS2482_STATUS_DIR 			(1<<7)
-	#define DS2482_POINTER_DATA			0xE1
-	#define DS2482_POINTER_CONFIG		0xC3
-		#define DS2482_CONFIG_APU			(1<<0)
-		#define DS2482_CONFIG_SPU			(1<<2)
-		#define DS2482_CONFIG_1WS			(1<<3)
-
-
-#define DS2482_COMMAND_WRITECONFIG	0xD2
-#define DS2482_COMMAND_RESETWIRE	0xB4
-#define DS2482_COMMAND_WRITEBYTE	0xA5
-#define DS2482_COMMAND_READBYTE		0x96
-#define DS2482_COMMAND_SINGLEBIT	0x87
-#define DS2482_COMMAND_TRIPLET		0x78
+void send_simple_response(const ComType com, const uint8_t* data);
 
 #define WIRE_COMMAND_SKIP			0xCC
 #define WIRE_COMMAND_SELECT			0x55
 #define WIRE_COMMAND_SEARCH			0xF0
 
-#define DS2482_ERROR_TIMEOUT		(1<<0)
-#define DS2482_ERROR_SHORT			(1<<1)
-#define DS2482_ERROR_CONFIG			(1<<2)
-
-void DS2482_beginAndWrite(uint8_t byteToWrite);
-uint8_t DS2482_end();
-void DS2482_writeByte(uint8_t data);
-uint8_t DS2482_readByte();
+uint8_t wireReset();
+void wireWriteByte(uint8_t data, uint8_t power);
+uint8_t wireReadByte();
+void wireWriteBit(uint8_t data, uint8_t power);
+uint8_t wireReadBit();
+void wireSkip();
+void wireSelect(const uint8_t *rom);
+void wireResetSearch();
+uint8_t wireSearch(uint8_t *address);
 
 #endif

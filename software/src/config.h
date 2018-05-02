@@ -38,7 +38,7 @@
 #define BRICKLET_HARDWARE_VERSION_MINOR 1
 #define BRICKLET_HARDWARE_VERSION_REVISION 0
 
-#define BRICKLET_DEVICE_IDENTIFIER 290 // HsRy
+#define BRICKLET_DEVICE_IDENTIFIER 401
 
 #define LOGGING_LEVEL LOGGING_DEBUG
 #define DEBUG_BRICKLET 0
@@ -48,11 +48,10 @@
 
 typedef struct {
     uint8_t mError;
-    //uint8_t searchAddress[8];
-    //uint8_t searchLastDiscrepancy;
-    //uint8_t searchLastDeviceFlag;
-    //uint8_t searchExhausted;
-    //uint8_t mTimeout;
+    uint8_t searchLastDiscrepancy;
+    uint8_t searchExhausted;
+    uint8_t searchAddress[8];
+    int16_t conversionSleep;
 } BrickContext;
 
 #endif
