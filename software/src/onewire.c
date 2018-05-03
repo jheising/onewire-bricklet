@@ -136,6 +136,84 @@ void invocation(const ComType com, const uint8_t *data) {
             SLEEP_MS(5);
             send_simple_response(com, data);
         }
+        case FID_TEMP_START_CONVERSION:
+        {
+            wireReset();
+            wireSkip();
+            wireWriteByte(0x44, false);
+            send_simple_response(com, data);
+            break;
+        }
+        case FID_TEMP_READ_SCRATCH:
+        {
+            wireReset();
+            wireSelect(((WireAddressMessage*)data)->address);
+            wireWriteByte(0xBE, false);
+
+            TempScratchPadMessage response;
+            response.header         = ((WireAddressMessage*)data)->header;
+            response.header.length  = sizeof(TempScratchPadMessage);
+
+            for(uint8_t i = 0; i < 9; i++){
+                response.scratchPad[i] = wireReadByte();
+            }
+
+            wireReset();
+
+            BA->send_blocking_with_timeout(&response, sizeof(TempScratchPadMessage), com);
+        }
+        case FID_TEMP_SET_RESOLUTION:
+        {
+            uint8_t resByte;
+            int16_t conversionSleep;
+
+            switch(resolution)
+            {
+                case 9:
+                {
+                    resByte = TEMP_9_BIT;
+                    conversionSleep = 94;
+                    break;
+                }
+                case 10:
+                {
+                    resByte = TEMP_10_BIT;
+                    conversionSleep = 188;
+                    break;
+                }
+                case 11:
+                {
+                    resByte = TEMP_11_BIT;
+                    conversionSleep = 375;
+                    break;
+                }
+                default:
+                {
+                    resByte = TEMP_12_BIT;
+                    conversionSleep = 750;
+                }
+            }
+
+            wireReset();
+
+            if(address == NULL)
+            {
+                wireSkip();
+            }
+            else
+            {
+                wireSelect(address);
+            }
+
+            wireWriteByte(TEMP_WRITESCRATCH, false);
+            wireWriteByte(0x0, false);
+            wireWriteByte(0x0, false);
+            wireWriteByte(resByte, false);
+
+
+            send_simple_response(com, data);
+            break;
+        }
 		default: {
 			BA->com_return_error(data, sizeof(MessageHeader), MESSAGE_ERROR_CODE_NOT_SUPPORTED, com);
 			break;
@@ -203,32 +281,7 @@ void send_simple_response(const ComType com, const uint8_t* data) {
 
     return conversionSleep;
 }
-
-void temp_read_scratchpad(const uint8_t* address, uint8_t* scratchPad)
-{
-    wireReset();
-    wireSelect(address);
-    wireWriteByte(TEMP_READSCRATCH, false);
-
-    for(uint8_t i = 0; i < 9; i++){
-        scratchPad[i] = wireReadByte();
-    }
-
-    wireReset();
-}
-
-int16_t temp_getInC(const uint8_t* address)
-{
-    uint8_t scratchPad[9];
-    temp_read_scratchpad(address, scratchPad);
-
-    int16_t rawTemp = (((int16_t) scratchPad[1]) << 11) | (((int16_t) scratchPad[0]) << 3);
-    //return (float)rawTemp * 0.0078125;
-    return rawTemp;
-}
-
-// Helper functions to make dealing with I2C side easier*/
-
+*/
 
 // Generates a 1-Wire reset/presence-detect cycle (Figure 4) at the 1-Wire line. The state
 // of the 1-Wire line is sampled at tSI and tMSP and the result is reported to the host 

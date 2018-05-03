@@ -1,0 +1,14 @@
+{
+  "name": "bricklet1wire",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Bricklet1Wire.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tinkerforge": "^2.0.17"
+  }
+}

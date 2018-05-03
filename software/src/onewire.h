@@ -38,6 +38,9 @@
 #define FID_SET_DS2482_CONFIG 10
 #define FID_GET_DS2482_CONFIG 11
 #define FID_RESET_DS2482 12
+#define FID_TEMP_START_CONVERSION 13
+#define FID_TEMP_READ_SCRATCH 14
+#define FID_TEMP_SET_RESOLUTION 15
 
 typedef struct {
 	MessageHeader header;
@@ -70,6 +73,11 @@ typedef struct {
 	uint8_t strongPullup;
 	uint8_t speed;
 } __attribute__((__packed__)) DS2482ConfigMessage;
+
+typedef struct {
+	MessageHeader header;
+	uint8_t scratchPad[9];
+} __attribute__((__packed__)) TempScratchPadMessage;
 
 void invocation(const ComType com, const uint8_t *data);
 void constructor(void);
