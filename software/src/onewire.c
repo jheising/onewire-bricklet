@@ -167,7 +167,7 @@ void invocation(const ComType com, const uint8_t *data) {
             uint8_t resByte;
             int16_t conversionSleep;
 
-            switch(resolution)
+            switch(((ByteMessage*)data)->theByte)
             {
                 case 9:
                 {
@@ -195,21 +195,12 @@ void invocation(const ComType com, const uint8_t *data) {
             }
 
             wireReset();
-
-            if(address == NULL)
-            {
-                wireSkip();
-            }
-            else
-            {
-                wireSelect(address);
-            }
-
-            wireWriteByte(TEMP_WRITESCRATCH, false);
+            wireSkip();
+            wireWriteByte(WRITESCRATCH, false);
             wireWriteByte(0x0, false);
             wireWriteByte(0x0, false);
             wireWriteByte(resByte, false);
-
+            wireReset();
 
             send_simple_response(com, data);
             break;

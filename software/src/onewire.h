@@ -90,6 +90,15 @@ void send_simple_response(const ComType com, const uint8_t* data);
 #define WIRE_COMMAND_SELECT			0x55
 #define WIRE_COMMAND_SEARCH			0xF0
 
+#define COPYSCRATCH     0x48  // Copy EEPROM
+#define READSCRATCH     0xBE  // Read EEPROM
+#define WRITESCRATCH    0x4E  // Write to EEPROM
+
+#define TEMP_9_BIT  0x1F //  9 bit
+#define TEMP_10_BIT 0x3F // 10 bit
+#define TEMP_11_BIT 0x5F // 11 bit
+#define TEMP_12_BIT 0x7F // 12 bit
+
 uint8_t wireReset();
 void wireWriteByte(uint8_t data, uint8_t power);
 uint8_t wireReadByte();

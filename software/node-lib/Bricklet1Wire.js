@@ -27,6 +27,7 @@ Bricklet1Wire.FID_GET_DS2482_CONFIG = 11;
 Bricklet1Wire.FID_RESET_DS2482 = 12;
 Bricklet1Wire.FID_TEMP_START_CONVERSION = 13;
 Bricklet1Wire.FID_TEMP_READ_SCRATCH = 14;
+Bricklet1Wire.FID_TEMP_SET_RESOLUTION = 15;
 
 function Bricklet1Wire(uid, ipcon) {
 
@@ -53,6 +54,7 @@ function Bricklet1Wire(uid, ipcon) {
     this.responseExpected[Bricklet1Wire.FID_RESET_DS2482] = Device.RESPONSE_EXPECTED_ALWAYS_TRUE;
     this.responseExpected[Bricklet1Wire.FID_TEMP_START_CONVERSION] = Device.RESPONSE_EXPECTED_ALWAYS_TRUE;
     this.responseExpected[Bricklet1Wire.FID_TEMP_READ_SCRATCH] = Device.RESPONSE_EXPECTED_ALWAYS_TRUE;
+    this.responseExpected[Bricklet1Wire.FID_TEMP_SET_RESOLUTION] = Device.RESPONSE_EXPECTED_ALWAYS_TRUE;
 
     this.wireReset = function (returnCallback, errorCallback) {
         this.ipcon.sendRequest(this, Bricklet1Wire.FID_WIRE_RESET, [], '', '', returnCallback, errorCallback);
@@ -95,6 +97,10 @@ function Bricklet1Wire(uid, ipcon) {
 
     this.resetBus = function (returnCallback, errorCallback) {
         this.ipcon.sendRequest(this, Bricklet1Wire.FID_RESET_DS2482, [], '', '', returnCallback, errorCallback);
+    };
+
+    this.tempSetResolution = function (resolution, returnCallback, errorCallback) {
+        this.ipcon.sendRequest(this, Bricklet1Wire.FID_TEMP_SET_RESOLUTION, [resolution], 'B', '', returnCallback, errorCallback);
     };
 
     this.tempStartConversion = function (returnCallback, errorCallback) {
